@@ -1,9 +1,9 @@
 package org.tensorflow.demo;
 
-//import static com.moworkspace.pixel_front.MainActivity.p_email;
-//import static com.moworkspace.pixel_front.MainActivity.p_name;
-//import static com.moworkspace.pixel_front.MainActivity.p_password;
-//import static com.moworkspace.pixel_front.MainActivity.p_userID;
+import static org.tensorflow.demo.MainActivity.p_email;
+import static org.tensorflow.demo.MainActivity.p_name;
+import static org.tensorflow.demo.MainActivity.p_password;
+import static org.tensorflow.demo.MainActivity.p_userID;
 
 import android.content.Context;
 import android.content.Intent;
@@ -40,15 +40,15 @@ public class FragmentPage3 extends Fragment {
             @Override
             public void onClick(View view) {
                 //intent_변수들 빈 값으로 만들기
-//                p_name = "";
-//                p_userID = -1;
-//                p_email = "";
-//                p_password = "";
+                p_name = "";
+                p_userID = -1;
+                p_email = "";
+                p_password = "";
 
-//                Intent intent=new Intent(getActivity(),LoginActivity.class);
-//                startActivity(intent);
-                Intent intent=new Intent(getActivity(),DetectorActivity.class);
+                Intent intent=new Intent(getActivity(),LoginActivity.class);
                 startActivity(intent);
+//                Intent intent=new Intent(getActivity(),DetectorActivity.class);
+//                startActivity(intent);
             }
         });
 

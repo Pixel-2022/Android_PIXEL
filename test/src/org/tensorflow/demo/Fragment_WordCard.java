@@ -37,7 +37,7 @@ public class Fragment_WordCard extends Fragment {
         mLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(mLayoutManager);
 
-//        adapter = new WordCardAdapter(context,dataList);
+        adapter = new WordCardAdapter(context,dataList);
 
         dataList.add(new Data(titles[0],videos[0],images[0]));
         dataList.add(new Data(titles[1],videos[1],images[1]));
@@ -46,14 +46,14 @@ public class Fragment_WordCard extends Fragment {
         recyclerView.setAdapter(adapter);
 
 
-        SearchView searchView = (SearchView) v.findViewById(R.id.searchView);
+        final SearchView searchView = (SearchView) v.findViewById(R.id.searchView);
         searchView.setIconifiedByDefault(false);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String a_query) {
                 // to do
-//                searchView.clearFocus();
+                searchView.clearFocus();
                 return false;
             }
 

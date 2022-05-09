@@ -103,7 +103,7 @@ public class WordCardAdapter extends RecyclerView.Adapter<WordCardAdapter.ItemVi
 //        void onBind(Data data){
 //            wordTitle.setText(data.getTitle());
 //            wordImage.setImageResource(data.getResId());
-
+//
 //        }
 
     }

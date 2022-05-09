@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:name="fragment1_hand">
 
-    <com.moworkspace.pixel_front.CameraSurfaceView
+    <org.tensorflow.demo.CameraSurfaceView
         android:layout_gravity="center"
         android:id="@+id/surfacaview"
         android:layout_width="300dp"

@@ -51,8 +51,10 @@ public class Fragment1Stuff extends Fragment {
         cap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, TAKE_PICTURE);
+//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(cameraIntent, TAKE_PICTURE);
+                  Intent intent=new Intent(getActivity(),DetectorActivity.class);
+                  startActivity(intent);
             }
         });
 
