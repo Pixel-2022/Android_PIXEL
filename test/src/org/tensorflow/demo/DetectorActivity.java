@@ -27,10 +27,12 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.media.ImageReader.OnImageAvailableListener;
 import android.os.SystemClock;
+import android.util.Log;
 import android.util.Size;
 import android.util.TypedValue;
 import android.widget.Toast;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -46,6 +48,8 @@ import org.tensorflow.demo.R; // Explicit import needed for internal Google buil
  * objects.
  */
 public class DetectorActivity extends CameraActivity implements OnImageAvailableListener {
+  public static List<String> Y_names= new ArrayList<>();
+
   private static final Logger LOGGER = new Logger();
 
   // Configuration values for the prepackaged multibox model.
@@ -318,6 +322,20 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
                 cropToFrameTransform.mapRect(location);
                 result.setLocation(location);
+
+                if(result.getTitle() != null) {
+                  if(Y_names.contains(result.getTitle())){
+                    Log.i("지금 ","이 값은 있는 값이야");
+                  }
+                  else{
+                    Y_names.add(result.getTitle());
+                  }
+                  for(Object object : Y_names) {
+                    String element = (String) object;
+                    Log.e("내용",element);
+                  }
+
+                }
                 mappedRecognitions.add(result);
               }
             }

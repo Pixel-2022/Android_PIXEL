@@ -16,6 +16,8 @@
 
 package org.tensorflow.demo;
 
+import static org.tensorflow.demo.DetectorActivity.Y_names;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
@@ -38,9 +40,18 @@ import android.os.Trace;
 import android.util.Size;
 import android.view.KeyEvent;
 import android.view.Surface;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.tensorflow.demo.env.ImageUtils;
 import org.tensorflow.demo.env.Logger;
 import org.tensorflow.demo.R; // Explicit import needed for internal Google builds.
@@ -70,6 +81,13 @@ public abstract class CameraActivity extends Activity
   private Runnable postInferenceCallback;
   private Runnable imageConverter;
 
+  //리사이클러뷰
+  Yolo_Adapter adapter;
+  private RecyclerView.LayoutManager mLayoutmanager;
+  List<Yolo_data> dataList =new ArrayList<>();
+
+  Button save;
+
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     LOGGER.d("onCreate " + this);
@@ -77,6 +95,25 @@ public abstract class CameraActivity extends Activity
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     setContentView(R.layout.activity_camera);
+    final RecyclerView recyclerView = findViewById(R.id.yolo_recyclerView);
+    mLayoutmanager=new LinearLayoutManager(getApplication());
+    recyclerView.setLayoutManager(mLayoutmanager);
+    adapter=new Yolo_Adapter(getApplication(), dataList);
+
+    dataList.add(new Yolo_data("하이"));
+    recyclerView.setAdapter(adapter);
+
+    save=findViewById(R.id.stuff_save);
+    save.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        dataList.clear();
+        for (int i=0; i<Y_names.size(); i++){
+          dataList.add(new Yolo_data(Y_names.get(i)));
+        }
+        recyclerView.setAdapter(adapter);
+      }
+    });
 
     if (hasPermission()) {
       setFragment();

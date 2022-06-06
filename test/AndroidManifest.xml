@@ -40,7 +40,8 @@
         android:icon="@drawable/ic_launcher"
         android:theme="@style/Theme.Pixel_Front"
         android:banner="@drawable/ic_launcher">
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER" />
