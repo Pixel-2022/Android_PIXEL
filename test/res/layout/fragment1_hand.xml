@@ -18,6 +18,7 @@
         android:layout_height="90dp"
         android:background="#C6DAD6"/>
     <Button
+        android:id="@+id/get"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"

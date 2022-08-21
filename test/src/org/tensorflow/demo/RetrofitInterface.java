@@ -1,10 +1,13 @@
 package org.tensorflow.demo;
 
 
+import com.google.gson.JsonElement;
+
 import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface RetrofitInterface {
@@ -17,4 +20,27 @@ public interface RetrofitInterface {
     @POST("/user/check") //이메일 보내기 (인증번호용)
     Call<CheckResult> executeCheck(@Body HashMap<String, String> map);
 
+    @GET("/dict/dictAll")
+    Call<JsonElement> getDictAll();
+
+    @POST("/wordList/listAll")
+    Call<JsonElement> getListAll(@Body HashMap<String, String> map);
+
+    @POST("/wordList/listAdd")
+    Call<JsonElement> addList(@Body HashMap<String, String> map);
+    //Call<JsonElement> addList(@Body WordInformation wordInformation);
+
+    @POST("/wordList/listDel")
+    Call<JsonElement> delList(@Body HashMap<String, String> map);
+
+    //    API한테서 값 받아오기
+    @GET("/muzi")
+    Call<JsonElement> getWhatEverMuzi();
+    //    API한테서 값 받아오기
+    @POST("/test")
+    Call<JsonElement> getWhatEver(@Body HashMap<String, float[][]> map);
+
+    //    API한테 값 보내주기
+    @POST("/point")
+    Call<JsonElement> sendLandmark(@Body HashMap<String, float[][]> map);
 }

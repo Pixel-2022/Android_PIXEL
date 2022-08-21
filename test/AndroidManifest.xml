@@ -38,6 +38,7 @@
         android:usesCleartextTraffic="true"
         android:label="@string/app_name"
         android:icon="@drawable/ic_launcher"
+        android:supportsRtl="true"
         android:theme="@style/Theme.Pixel_Front"
         android:banner="@drawable/ic_launcher">
         <activity android:name=".SplashActivity"
@@ -52,10 +53,30 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".JoinActivity"/>
         <activity android:name=".Forgot_pw_Activity"/>
+        <activity android:name=".holistic_activity"/>
+        <activity android:name=".EndTalk_Mediapipe_Activity"/>
         <activity android:name="org.tensorflow.demo.DetectorActivity"
             android:screenOrientation="portrait"
             android:label="@string/activity_name_detection">
         </activity>
+        <meta-data
+            android:name="cameraFacingFront"
+            android:value="false" />
+        <meta-data
+            android:name="binaryGraphName"
+            android:value="holistic_tracking_gpu.binarypb" />
+        <meta-data
+            android:name="inputVideoStreamName"
+            android:value="input_video" />
+        <meta-data
+            android:name="outputVideoStreamName"
+            android:value="output_video" />
+        <meta-data
+            android:name="flipFramesVertically"
+            android:value="true" />
+        <meta-data
+            android:name="converterNumBuffers"
+            android:value="3" />
     </application>
 
 
