@@ -60,7 +60,7 @@ public class holistic_activity extends AppCompatActivity {
     // the bottom-left corner, whereas MediaPipe in general assumes the image origin is at the
     // top-left corner.
     // NOTE: use "flipFramesVertically" in manifest metadata to override this behavior.
-    private static final boolean FLIP_FRAMES_VERTICALLY = true;
+    private static final boolean FLIP_FRAMES_VERTICALLY = false;
 
     private Button backBtn;
     static {
@@ -98,13 +98,12 @@ public class holistic_activity extends AppCompatActivity {
     float[][] output_data = new float[1][3];
     int l = 0;
 
-    String[] motion = {"look","train","left"};
+    String[] motion = {"보다","기차","왼쪽"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_holistic_activity);
-
 
         HashMap<String, float[][]> LandmarkMap = new HashMap<>();
         LandmarkMap.put("pose",null);
@@ -257,7 +256,7 @@ public class holistic_activity extends AppCompatActivity {
         processor
                 .addPacketCallback("left_hand_landmarks", (packet) -> {
                     try {
-//                        Log.d("ㄱ", "left");
+                        Log.d("ㄱ", "left");
                         byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                         LandmarkProto.NormalizedLandmarkList poseLandmarks = LandmarkProto.NormalizedLandmarkList.parseFrom(landmarksRaw);
 //                        Log.v("AAA", String.valueOf(packet));
@@ -278,7 +277,7 @@ public class holistic_activity extends AppCompatActivity {
         processor
                 .addPacketCallback("right_hand_landmarks", (packet) -> {
                     try {
-//                        Log.d("ㄱ", "right");
+                        Log.d("ㄱ", "right");
                         byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                         LandmarkProto.NormalizedLandmarkList poseLandmarks = LandmarkProto.NormalizedLandmarkList.parseFrom(landmarksRaw);
 //                        Log.v("AAA", String.valueOf(packet));

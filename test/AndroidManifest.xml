@@ -73,7 +73,7 @@
             android:value="output_video" />
         <meta-data
             android:name="flipFramesVertically"
-            android:value="true" />
+            android:value="false" />
         <meta-data
             android:name="converterNumBuffers"
             android:value="3" />
