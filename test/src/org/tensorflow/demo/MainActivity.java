@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
     //권한
     private final int MY_PERMISSIONS_REQUEST_CAMERA=1001;
-
+    // Run the pipeline and the model inference on GPU or CPU.
+    private static final boolean RUN_ON_GPU = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,14 +53,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         Intent intent= getIntent();
         Bundle bundle = intent.getExtras();
-//        로그인한 사용자 정보 전역변수에 저장
-//        p_name = bundle.getString("name");
-//        p_email = bundle.getString("email");
-//        p_password = bundle.getString("password");
-//        p_userID = bundle.getInt("UserID");
+
+        //로그인한 사용자 정보 전역변수에 저장
+
+        //p_name = "123";
+        //p_email = "123";
+        //p_password = "456";
+        //p_userID = 2;
+
+
+        p_name = bundle.getString("name");
+        p_email = bundle.getString("email");
+        p_password = bundle.getString("password");
+        p_userID = bundle.getInt("UserID");
+
 
         //바텀 네비게이션 이용하기
         mBottomNV = findViewById(R.id.nav_view);
@@ -134,9 +143,9 @@ public class MainActivity extends AppCompatActivity {
             else if(a==1){
                 fragment = new Fragment_WordCard();
             }
-            else{
-                fragment = new Fragment_EndTalk();
-            }
+//            else{
+//                fragment = new Fragment_EndTalk();
+//            }
             fragmentTransaction.add(R.id.content_layout, fragment, tag0);
         }
         else {
@@ -193,7 +202,5 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
-
     }
-
 }
