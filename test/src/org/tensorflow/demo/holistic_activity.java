@@ -44,7 +44,10 @@ import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -97,6 +100,7 @@ public class holistic_activity extends AppCompatActivity {
     float[][][] input_data = new float[1][30][432];
     float[][] output_data = new float[1][3];
     int l = 0;
+    Queue<Float> queue = new LinkedList<>();
 
     String[] motion = {"보다","기차","왼쪽"};
 
@@ -181,19 +185,33 @@ public class holistic_activity extends AppCompatActivity {
 
                                 try {
                                     //1. 배열에 계산된 좌표값을 30개씩 받아와야 함. (String[] -> Float)
-                                    //1-(1). 🐌배열은 stack형식으로 받아야 함!!
+                                    //1-(1). 배열은 stack형식으로 받아야 함!!
                                     if(l<30){
-                                        for(int i=0; i<432; i++){
-                                            input_data[0][l][i] = Float.parseFloat(strArr[i]);
+                                        for(int j=0; j<432; j++){
+                                            queue.offer(Float.parseFloat(strArr[j]));
+                                            Log.e("큐 offer1", String.valueOf(queue.size()));
                                         }
                                         l++;
 
-                                    }else{// 2. 30개가 되면 모델에게 보내기
+                                    }else{
+                                        for(int j=0; j<432; j++){
+                                            queue.poll();
+                                            queue.offer(Float.parseFloat(strArr[j]));
+                                        }
+                                        Iterator iter = queue.iterator();
+                                        while(iter.hasNext()){
+                                            for(int j=0; j<30; j++) {
+                                                for (int k = 0; k < 432; k++) {
+                                                    input_data[0][j][k] = (float) iter.next();
+                                                }
+                                            }
+                                        }
+                                        // 2. 30개가 되면 모델에게 보내기
                                         Interpreter lite = getTfliteInterpreter("AAAA4.tflite");
                                         lite.run(input_data, output_data);
 
                                         Log.e("번역된 값이에요", String.valueOf(output_data[0][0])+" "+String.valueOf(output_data[0][1])+" "+String.valueOf(output_data[0][2]));
-                                        l=0;
+
                                     }
                                     //3. output을 텍스트 뷰에 띄워주기
                                     TextView answerFrame = findViewById(R.id.answerFrame);
