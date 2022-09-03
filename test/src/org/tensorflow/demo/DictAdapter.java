@@ -94,13 +94,13 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
             textView = itemView.findViewById(R.id.dict_name);
             save = itemView.findViewById(R.id.save_word);
             showVideo = itemView.findViewById(R.id.show_video);
-            dictAct = itemView.findViewById(R.id.dict_act);
+            /*dictAct = itemView.findViewById(R.id.dict_act);
             dictAct.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d("아이템 클릭", String.valueOf(getAdapterPosition()));
                 }
-            });
+            });*/
             save.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     Log.e("포지션", String.valueOf(getAdapterPosition()));

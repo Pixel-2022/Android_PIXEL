@@ -5,7 +5,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_vertical|center_horizontal"
-    android:background="#6D929B">
+    android:background="#5D5D79">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MENU"
+            android:gravity="center"
+            android:textColor="#F7EBD5"
+            android:textSize="20dp"
+            android:layout_marginBottom="5dp"
+            />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="3dp"
+            android:background="#F7EBD5" />
+    </LinearLayout>
+
 
     <ImageView
         android:layout_width="match_parent"
