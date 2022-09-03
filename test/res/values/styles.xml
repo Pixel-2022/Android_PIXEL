@@ -4,8 +4,10 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">#ffffff</item>
         <!-- 상태바 색상 변경-->
-        <item name="colorPrimaryVariant">#C6DAD6</item>
-        <item name="colorOnPrimary">#ffffff</item>
+
+        <item name="colorPrimaryVariant">#FBD3CB</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#ffffff</item>
         <item name="colorSecondaryVariant">#ffffff</item>

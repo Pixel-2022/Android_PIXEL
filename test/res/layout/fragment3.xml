@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="100px">
+        android:layout_marginTop="50px">
 
         <TextView
             android:id="@+id/setNick"
@@ -55,7 +55,7 @@
 
         <android.widget.Button
             android:id="@+id/setUpdate"
-            android:layout_width="400px"
+            android:layout_width="370px"
             android:layout_height="match_parent"
             android:background="@drawable/login_round_btn"
             android:text="수정하기"
@@ -65,7 +65,7 @@
             />
         <android.widget.Button
             android:id="@+id/setLogout"
-            android:layout_width="400px"
+            android:layout_width="370px"
             android:layout_height="match_parent"
             android:background="@drawable/login_round_btn"
             android:text="로그아웃"
