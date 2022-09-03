@@ -97,12 +97,13 @@ public class holistic_activity extends AppCompatActivity {
     // ApplicationInfo for retrieving metadata defined in the manifest.
     private ApplicationInfo applicationInfo;
 
-    float[][][] input_data = new float[1][30][432];
-    float[][] output_data = new float[1][3];
+    float[][][] input_data = new float[1][30][368];
+    float[][] output_data = new float[1][4];
     int l = 0;
     Queue<Float> queue = new LinkedList<>();
+    Queue<Integer> answerQueue = new LinkedList<>();
 
-    String[] motion = {"보다","기차","왼쪽"};
+    String[] motion = {"안녕하세요","먹다","밥","만나다"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +118,8 @@ public class holistic_activity extends AppCompatActivity {
 
         RetrofitClient retrofitClient = new RetrofitClient();
         retrofitClient.generateClient();
+
+        TextView answerFrame = findViewById(R.id.answerFrame);
 
         backBtn = findViewById(R.id.BackBtn);
         backBtn.setOnClickListener(new View.OnClickListener(){
@@ -164,87 +167,117 @@ public class holistic_activity extends AppCompatActivity {
 //                                        + "] "
 //                                        + getPoseLandmarksDebugString(poseLandmarks));
                         LandmarkMap.put("face",getPoseLandmarksDebugAry(poseLandmarks));
+                        if(LandmarkMap.get("leftHand")==null && LandmarkMap.get("rightHand")==null){
+                            answerFrame.setText("손이 보이지 않아서 인식이 되지 않아요");
+                        }else {
+                            Call<JsonElement> callAPI = retrofitClient.getApi().sendLandmark(LandmarkMap);
 
-                        Call<JsonElement> callAPI = retrofitClient.getApi().sendLandmark(LandmarkMap);
 
-                        callAPI.enqueue(new Callback<JsonElement>() {
-                            @Override
-                            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                                // Landmark Map 값 초기화
-                                LandmarkMap.put("pose",null);
-                                LandmarkMap.put("leftHand",null);
-                                LandmarkMap.put("rightHand",null);
-                                LandmarkMap.put("face",null);
-                                // api로부터 받은 계산된 좌표값을 모델의 input 형태에 맞게 변환 (JsonElement -> JsonArray -> String -> String[])
-                                JsonArray DictResponseArray = response.body().getAsJsonArray();
-                                Log.e("받아온 값", String.valueOf(DictResponseArray));
-                                String StringResponse = String.valueOf(DictResponseArray);
-                                StringResponse = StringResponse.replace("[","");
-                                StringResponse = StringResponse.replace("]","");
-                                String[] strArr = StringResponse.split(",");
+                            // Landmark Map 값 초기화
+                            LandmarkMap.put("pose", null);
+                            LandmarkMap.put("leftHand", null);
+                            LandmarkMap.put("rightHand", null);
+                            LandmarkMap.put("face", null);
+                            callAPI.enqueue(new Callback<JsonElement>() {
+                                @Override
+                                public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
 
-                                try {
-                                    //1. 배열에 계산된 좌표값을 30개씩 받아와야 함. (String[] -> Float)
-                                    //1-(1). 배열은 stack형식으로 받아야 함!!
-                                    if(l<30){
-                                        for(int j=0; j<432; j++){
-                                            queue.offer(Float.parseFloat(strArr[j]));
-                                            Log.e("큐 offer1", String.valueOf(queue.size()));
-                                        }
-                                        l++;
+                                    // api로부터 받은 계산된 좌표값을 모델의 input 형태에 맞게 변환 (JsonElement -> JsonArray -> String -> String[])
+                                    JsonArray DictResponseArray = response.body().getAsJsonArray();
+                                    Log.e("받아온 값", String.valueOf(DictResponseArray));
 
-                                    }else{
-                                        for(int j=0; j<432; j++){
-                                            queue.poll();
-                                            queue.offer(Float.parseFloat(strArr[j]));
-                                        }
-                                        Iterator iter = queue.iterator();
-                                        while(iter.hasNext()){
-                                            for(int j=0; j<30; j++) {
-                                                for (int k = 0; k < 432; k++) {
-                                                    input_data[0][j][k] = (float) iter.next();
+                                    String StringResponse = String.valueOf(DictResponseArray);
+                                    StringResponse = StringResponse.replace("[", "");
+                                    StringResponse = StringResponse.replace("]", "");
+                                    String[] strArr = StringResponse.split(",");
+
+                                    try {
+                                        //1. 배열에 계산된 좌표값을 30개씩 받아와야 함. (String[] -> Float)
+                                        //1-(1). 배열은 stack형식으로 받아야 함!!
+                                        if (l < 30) {
+                                            for (int j = 0; j < 432; j++) {
+                                                queue.offer(Float.parseFloat(strArr[j]));
+                                                Log.e("큐 offer1", String.valueOf(queue.size()));
+                                            }
+                                            l++;
+
+                                        } else {
+                                            for (int j = 0; j < 432; j++) {
+                                                queue.poll();
+                                                queue.offer(Float.parseFloat(strArr[j]));
+                                            }
+                                            Iterator iter = queue.iterator();
+                                            while (iter.hasNext()) {
+                                                for (int j = 0; j < 30; j++) {
+                                                    for (int k = 0; k < 432; k++) {
+                                                        input_data[0][j][k] = (float) iter.next();
+                                                    }
                                                 }
                                             }
+                                            // 2. 30개가 되면 모델에게 보내기
+                                            Interpreter lite = getTfliteInterpreter("AAAA6.tflite");
+                                            lite.run(input_data, output_data);
+
+                                            Log.e("번역된 값이에요", String.valueOf(output_data[0][0]) + " " + String.valueOf(output_data[0][1]) + " " + String.valueOf(output_data[0][2]) + " " + String.valueOf(output_data[0][3]));
+
                                         }
-                                        // 2. 30개가 되면 모델에게 보내기
-                                        Interpreter lite = getTfliteInterpreter("AAAA4.tflite");
-                                        lite.run(input_data, output_data);
 
-                                        Log.e("번역된 값이에요", String.valueOf(output_data[0][0])+" "+String.valueOf(output_data[0][1])+" "+String.valueOf(output_data[0][2]));
+                                        //3. output을 텍스트 뷰에 띄워주기
 
-                                    }
-                                    //3. output을 텍스트 뷰에 띄워주기
-                                    TextView answerFrame = findViewById(R.id.answerFrame);
                                         // 3-(1). output_data에서 확률이 제일 큰 값을 AND 0.9이상일때만 출력하기
-                                    if((output_data[0][0]>=0.7 || output_data[0][1]>=0.7) || output_data[0][2]>=0.7){
-                                        // 3-(2). 배열의 max값에 해당하는 motion 데이터 값 출력하기
-                                        float maxNum = 0;
-                                        int maxLoc = -1;
-                                        for(int x=0; x<output_data.length; x++){
-                                            if(maxNum<output_data[0][x]){
-                                                maxNum = output_data[0][x];
-                                                maxLoc = x;
+                                        if ((output_data[0][0] >= 0.7 || output_data[0][1] >= 0.7) || output_data[0][2] >= 0.7 || output_data[0][3] >= 0.7) {
+                                            // 3-(2). 배열의 max값에 해당하는 motion 데이터 값 출력하기
+                                            float maxNum = 0;
+                                            int maxLoc = -1;
+                                            for (int x = 0; x < output_data.length; x++) {
+                                                if (maxNum < output_data[0][x]) {
+                                                    maxNum = output_data[0][x];
+                                                    maxLoc = x;
+                                                }
                                             }
-                                        }
-                                        if(maxLoc!=-1){
-                                            Log.e("번역 : ",motion[maxLoc]);
-                                            answerFrame.setText(motion[maxLoc]);
-                                        }
+                                            //maxLoc값을 5개 받는다
+                                            answerQueue.offer(maxLoc);
+                                            //값이 5개가 되면 각 원소들이 모두 일치하는지 확인한다.
+                                            if(answerQueue.size()==5){
 
-                                    }else{
-                                        answerFrame.setText("뭘까요?");
-                                    }
+                                            }
+                                                //값이 같다면, 그대로 출력하기
+                                            //새로운 6번째 값이 들어오면 poll후 offer한다.
+                                            if(answerQueue.size()<5){
+                                                answerQueue.offer(maxLoc);
+                                            }else{
+                                                answerQueue.poll();
+                                                answerQueue.offer(maxLoc);
+                                                Iterator answeriter = answerQueue.iterator();
+                                                while (answeriter.hasNext()) {
+                                                    for (int j = 0; j < 4; j++) {
+//                                                        answeriter.next()
+                                                    }
+                                                }
+                                            }
+
+
+                                            if (maxLoc != -1) {
+                                                Log.e("번역 : ", motion[maxLoc]);
+                                                answerFrame.setText(motion[maxLoc]);
+                                            }
+
+                                        } else {
+                                            answerFrame.setText("뭘까요?");
+                                        }
 
 //                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                            @Override
-                            public void onFailure(Call<JsonElement> call, Throwable t) {
-                                Log.e("실패군","실패다");
-                            }
-                        });
+
+                                @Override
+                                public void onFailure(Call<JsonElement> call, Throwable t) {
+                                    Log.e("실패군", "실패다");
+                                }
+                            });
+                        }
                     } catch (InvalidProtocolBufferException e) {
                         Log.e("AAA", "Failed to get proto.", e);
                     }
