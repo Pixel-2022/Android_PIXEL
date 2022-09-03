@@ -37,7 +37,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:layout_marginBottom="18dp"
-            android:background="@drawable/edit_round"
+            android:background="@drawable/edit_round_white"
             >
 
             <EditText
@@ -45,7 +45,7 @@
                 android:layout_gravity="center"
                 android:layout_width="280dp"
                 android:layout_height="50dp"
-                android:background="@drawable/edit_round"
+                android:background="@drawable/edit_round_white"
                 android:textColor="#5D5D79"
                 android:hint=" 이메일"
                 android:drawableLeft="@drawable/login_image1_2"
@@ -59,14 +59,14 @@
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:layout_margin="10px"
-            android:background="@drawable/edit_round"
+            android:background="@drawable/edit_round_white"
             >
             <EditText
                 android:id="@+id/logpass"
                 android:layout_gravity="center"
                 android:layout_width="280dp"
                 android:layout_height="50dp"
-                android:background="@drawable/edit_round"
+                android:background="@drawable/edit_round_white"
                 android:textColor="#5D5D79"
                 android:hint=" 비밀번호"
                 android:inputType="textPassword"
