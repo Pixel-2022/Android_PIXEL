@@ -15,51 +15,85 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="500dp"
-    tools:context="org.tensorflow.demo.CameraActivity" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="150dp">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/yolo_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:layout_gravity="center"/>
-    </LinearLayout>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center">
-
+    android:layout_height="match_parent"
+    >
     <Button
-        android:layout_margin="10dp"
-        android:layout_width="wrap_content"
+        android:id="@+id/BackBtn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:backgroundTint="#F5FAFA"
-        android:text="수락영상보기"
-        android:textColor="#6D929B"
-        android:textSize="15dp"
+        android:text="돌아가기"
+        android:backgroundTint="@color/black"
+        android:textColor="@color/white"
         />
 
-    <Button
-        android:id="@+id/stuff_save"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_marginLeft="13dp"
+        android:id="@+id/container"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        tools:context="org.tensorflow.demo.CameraActivity"
+        android:orientation="horizontal"/>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_margin="10dp"
-        android:backgroundTint="#F5FAFA"
-        android:text="단어목록보기"
-        android:textColor="#6D929B"
-        android:textSize="15dp" />
-</LinearLayout>
+        android:orientation="horizontal"
+        android:background="#FBD3CB">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="5">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/yolo_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@drawable/round_result"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="5">
+
+            <android.widget.Button
+                android:layout_margin="10dp"
+                android:layout_width="125dp"
+                android:layout_height="30dp"
+                android:background="@drawable/round_white"
+                android:text="화면 속 단어 찾기"
+                android:textColor="#5D5D79"
+                android:textSize="10dp"
+                />
+            <android.widget.Button
+
+                android:layout_width="125dp"
+                android:layout_height="30dp"
+                android:background="@drawable/round_white"
+                android:text="수화 영상 보기"
+                android:textColor="#5D5D79"
+                android:textSize="10dp"
+                />
+            <android.widget.Button
+                android:id="@+id/stuff_save"
+                android:layout_width="125dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/round_white"
+                android:text="단어장에 저장"
+                android:textColor="#5D5D79"
+                android:textSize="10dp"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
 </LinearLayout>
