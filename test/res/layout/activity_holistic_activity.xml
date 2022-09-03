@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="돌아가기"
         android:backgroundTint="@color/black"
-        android:layout_marginBottom="30dp"
+
         />
         <FrameLayout
             android:id="@+id/preview_display_layout"
@@ -28,24 +28,35 @@
                 android:gravity="center"
                 android:text="no_camera_access" />
         </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FBD3CB"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_margin="10dp"
+            android:id="@+id/answerFrame"
+            android:layout_gravity="center"
+            android:layout_width="350dp"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:background="@drawable/round_result"
+            android:text="얼굴과 손이 보이도록 \n카메라를 비춰주세요"
+            android:textSize="25dp"
+            android:textColor="#F7EBD5" />
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/round_white"
+            android:text="단어저장"
+            android:textColor="#6D929B"
+            android:textSize="15dp"
+            />
+    </LinearLayout>
 
-    <TextView
-        android:layout_margin="10dp"
-        android:id="@+id/answerFrame"
-        android:layout_gravity="center"
-        android:layout_width="300dp"
-        android:layout_height="90dp"
-        android:background="#C6DAD6"
-        android:text="Hello World!"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginRight="20dp"
-        android:backgroundTint="#F5FAFA"
-        android:text="단어저장"
-        android:textColor="#6D929B"
-        android:textSize="15dp"/>
 
 
 
