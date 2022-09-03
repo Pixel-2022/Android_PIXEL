@@ -2,14 +2,28 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent" android:orientation="vertical"
-    android:background="#6D929B">
-<!--    <com.moworkspace.pixel_front.CameraSurfaceView-->
-<!--        android:layout_gravity="center"-->
-<!--        android:id="@+id/surfacaview2"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="450dp"-->
-<!--        android:layout_weight="1"-->
-<!--        android:layout_marginBottom="10dp"/>-->
+    android:background="#5D5D79">
+
+    <Button
+        android:id="@+id/BackBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="돌아가기"
+        android:backgroundTint="@color/black"
+        />
+    <FrameLayout
+        android:id="@+id/preview_display_layout"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="325dp"
+        >
+        <TextView
+            android:id="@+id/no_camera_access_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:text="no_camera_access" />
+    </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +34,7 @@
             android:background="@drawable/chat_round_robot"
             android:text="test_robot"
             android:textSize="14dp"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:paddingRight="30dp"
             android:paddingLeft="30dp"
             android:paddingTop="10dp"
@@ -32,7 +46,7 @@
             android:background="@drawable/chat_round_user"
             android:text="test_user"
             android:textSize="14dp"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:paddingRight="30dp"
             android:paddingLeft="30dp"
             android:paddingTop="10dp"
@@ -42,36 +56,56 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.widget.Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_click"
+        android:drawableLeft="@drawable/film"
+        android:text="개구리"
+        android:textColor="@color/black"
+        android:layout_weight="1"
+        android:layout_margin="8dp"
+        />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="10dp">
-        <Button
+        <android.widget.Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#E8D0A9"
+            android:background="@drawable/card_round"
             android:drawableLeft="@drawable/film"
             android:text="개구리"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:layout_weight="1"
-            android:layout_margin="10dp"/>
-        <Button
+            android:layout_margin="8dp"
+            />
+
+        <android.widget.Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#E8D0A9"
+            android:background="@drawable/card_round"
             android:drawableLeft="@drawable/film"
             android:text="개미"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:layout_weight="1"
-            android:layout_margin="10dp"/>
-        <Button
+            android:layout_margin="8dp"
+            />
+        <android.widget.Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#E8D0A9"
+            android:background="@drawable/card_round"
             android:drawableLeft="@drawable/film"
             android:text="개인"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:layout_weight="1"
-            android:layout_margin="10dp"/>
+            android:layout_margin="8dp"
+            />
+
 
     </LinearLayout>
 
