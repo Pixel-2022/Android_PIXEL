@@ -20,9 +20,9 @@ public class FragmentPage2 extends Fragment {
 
     //ViewPager 변수 선언
     ViewPager2 vpHorizontal;
-    String[] headers = {"끝말잇기","단어카드","단어사전"};
-    int[] images = {R.drawable.endtalk_icon, R.drawable.wordcard_icon,R.drawable.worddict_icon};
-    int[] backImages = {R.drawable.back_endtalk,R.drawable.back_wordcard,R.drawable.back_worddict};
+    String[] headers = {"수어퀴즈","단어카드","단어사전"};
+    int[] images = {R.drawable.quiz_icon, R.drawable.wordcard_icon,R.drawable.worddict_icon};
+    int[] backImages = {R.drawable.back_quiz,R.drawable.back_wordcard,R.drawable.back_worddict};
     MainAdapter adapter;
     //Fragment 배경
     ImageView mainBackView;
