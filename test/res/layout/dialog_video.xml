@@ -11,7 +11,7 @@
         android:layout_height="100dp"
         android:text="동영상보기"
         android:textSize="60dp"
-        android:background="@drawable/dialog_d_yes"
+        android:background="@drawable/dialog_round2"
         />
     <VideoView
         android:id="@+id/videoV"
@@ -25,7 +25,7 @@
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:background="@drawable/dialog_d_yes"
+        android:background="@drawable/dialog_round2"
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="닫기"

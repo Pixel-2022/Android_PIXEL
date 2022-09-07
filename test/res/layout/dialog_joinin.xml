@@ -36,7 +36,7 @@
             android:textColor="#ffffff"
             android:text="네"
             android:textSize="20dp"
-            android:background="@drawable/dialog_ok"
+            android:background="@drawable/dialog_round"
             android:gravity="center" />
 
     </LinearLayout>
