@@ -85,10 +85,12 @@ public class Fragment_WordCard extends Fragment {
             @Override
             public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
                 if (response.code()==201){
-                    Log.e("AAA", "제대로 들어왔읍니다");
+                    Log.e("워드카드", "제대로 들어왔읍니다");
                 }
                 if(response.body() !=null ){
                     JsonArray ListResponseArray = response.body().getAsJsonArray();
+
+                    System.out.print(ListResponseArray);
 
                     ids=new int[ListResponseArray.size()];
                     stars=new Boolean[ListResponseArray.size()];

@@ -5,11 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHolder> {
@@ -27,7 +24,6 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_yolo, parent, false);
         return new ItemViewHolder(view);
     }
-
 
 
     @Override
@@ -52,5 +48,4 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
             Yolo_title=itemView.findViewById(R.id.Yolo_title);
         }
     }
-
 }
