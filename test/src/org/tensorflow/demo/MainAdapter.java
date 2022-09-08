@@ -1,6 +1,7 @@
 package org.tensorflow.demo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder>{
                 public void onClick(View v){
                     MainActivity main = (MainActivity) context;
                     int b= sendposition();
-                    main.toMain(b);
+                    if(b==0){
+                        Intent gotoQuizActivity = new Intent(context, QuizActivity.class);
+                        ((MainActivity)context).startActivity(gotoQuizActivity);
+                    }
+                    else{
+                        main.toMain(b);
+                    }
+
                 }
             });
         }
