@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.google.gson.JsonElement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +54,8 @@ public class WordCardAdapter extends RecyclerView.Adapter<WordCardAdapter.ItemVi
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Data data1 = data.get(position);
         holder.wordTitle.setText(data1.getWord());
-        holder.wordImage.setImageResource(R.drawable.test1);
+        Glide.with(holder.wordImage.getContext()).load(data1.getImage()).into(holder.wordImage);
+       // holder.wordImage.setImageResource(data1.getImage());
     }
 
     @Override

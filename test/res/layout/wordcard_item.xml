@@ -14,6 +14,7 @@
         android:text="신나"
         android:textSize="24dp"
         android:textStyle="bold"
+        android:textColor="#000000"
         />
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,8 +60,5 @@
                         android:layout_height="50dp"
                         android:background="@drawable/trash" />
                 </LinearLayout>
-
     </LinearLayout>
-
-
 </LinearLayout>

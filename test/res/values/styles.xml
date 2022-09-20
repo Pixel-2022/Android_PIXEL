@@ -5,7 +5,7 @@
         <item name="colorPrimary">#ffffff</item>
         <!-- 상태바 색상 변경-->
 
-        <item name="colorPrimaryVariant">#FBD3CB</item>
+        <item name="colorPrimaryVariant">#5D5D79</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="colorOnPrimary">#FFFFFF</item>
         <!-- Secondary brand color. -->
