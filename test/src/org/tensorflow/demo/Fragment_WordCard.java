@@ -99,18 +99,15 @@ public class Fragment_WordCard extends Fragment {
                     words=new String[ListResponseArray.size()];
                     images = new String[ListResponseArray.size()];
 
-                    String wordImg;
+
                     for (int i=0; i<ListResponseArray.size();i++){
                         JsonElement jsonElement = ListResponseArray.get(i);
+                        JsonElement jsonElement1= jsonElement.getAsJsonObject().get("WordDict");
+                        String wordImg= jsonElement1.getAsJsonObject().get("wordImg").getAsString();
                         int id = jsonElement.getAsJsonObject().get("id").getAsInt();
                         Boolean star = jsonElement.getAsJsonObject().get("star").getAsBoolean();
                         int uid=jsonElement.getAsJsonObject().get("UserId").getAsInt();
                         String word = jsonElement.getAsJsonObject().get("Word").getAsString();
-                        try{ wordImg = jsonElement.getAsJsonObject().get("wordImg").getAsString();}
-                        catch (Exception e){
-                            wordImg = "https://drive.google.com/file/d/1dlslbcqaQGUkmIB1FT65uOVrWOkFE89p/view?usp=sharing";
-                        }
-
 
                         ids[i] = id;
                         stars[i]=star;
@@ -190,5 +187,4 @@ public class Fragment_WordCard extends Fragment {
         }
         adapter.refresh1(delList);
     }
-
 }
