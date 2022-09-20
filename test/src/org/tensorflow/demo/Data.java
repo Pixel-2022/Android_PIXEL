@@ -5,12 +5,14 @@ public class Data {
     private Boolean star;
     private int UserId;
     private String Word;
+    private String image;
 
-    public Data(int id, int userid, Boolean star, String Word){
+    public Data(int id, int userid, Boolean star, String Word, String image){
         this.id = id;
         this.UserId=userid;
         this.Word = Word;
         this.star = star;
+        this.image=image;
     }
     public int getid(){
         return id;
@@ -36,6 +38,7 @@ public class Data {
     public void setWord(String Word){
         this.Word = Word;
     }
-
+    public String getImage() {return image;}
+    public void setImage(String image) {this.image = image;}
 }
 

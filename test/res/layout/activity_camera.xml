@@ -19,14 +19,15 @@
     android:layout_height="match_parent"
     android:background="#FBD3CB"
     >
-    <Button
+    <android.widget.Button
         android:id="@+id/BackBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="돌아가기"
-        android:backgroundTint="@color/black"
+        android:background="#000000"
         android:textColor="@color/white"
         />
+
 
     <LinearLayout
         android:id="@+id/container"
@@ -45,7 +46,7 @@
         android:background="#FBD3CB">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="250dp"
             android:layout_margin="10dp"
             android:layout_weight="5">
             <androidx.recyclerview.widget.RecyclerView
@@ -59,43 +60,39 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="250dp"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_weight="5">
+            android:layout_weight="5"
+            android:layout_margin="10dp">
 
             <android.widget.Button
+                android:id="@+id/stuff_save"
                 android:layout_margin="10dp"
-                android:layout_width="125dp"
-                android:layout_height="30dp"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
                 android:background="@drawable/round_white"
                 android:text="화면 속 단어 찾기"
                 android:textColor="#5D5D79"
-                android:textSize="10dp"
+                android:textSize="15dp"
                 />
             <android.widget.Button
-
-                android:layout_width="125dp"
-                android:layout_height="30dp"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
                 android:background="@drawable/round_white"
                 android:text="수화 영상 보기"
                 android:textColor="#5D5D79"
-                android:textSize="10dp"
+                android:textSize="15dp"
                 />
             <android.widget.Button
-                android:id="@+id/stuff_save"
-                android:layout_width="125dp"
-                android:layout_height="30dp"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/round_white"
                 android:text="단어장에 저장"
                 android:textColor="#5D5D79"
-                android:textSize="10dp"
+                android:textSize="15dp"
                 />
-
         </LinearLayout>
     </LinearLayout>
-
-
-
 </LinearLayout>
