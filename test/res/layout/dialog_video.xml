@@ -5,31 +5,44 @@
     android:orientation="vertical"
     android:background="@drawable/dialog_round"
     android:layout_gravity="center">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="동영상보기"
-        android:textSize="60dp"
-        android:background="@drawable/dialog_round2"
         />
-    <VideoView
-        android:id="@+id/videoV"
-        android:layout_width="250dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"/>
-
     <TextView
-        android:id="@+id/ok_btn"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="수어 동영상 보기"
+        android:textColor="#F7EBD5"
+        android:textSize="30dp"
         android:layout_gravity="center"
-        android:background="@drawable/dialog_round2"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="닫기"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:layout_marginBottom="3dp"/>
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:background="#F7EBD5" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center">
+        <VideoView
+            android:id="@+id/videoV"
+            android:layout_width="250dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/ok_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/dialog_delete_round"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="닫기"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 
 </LinearLayout>
