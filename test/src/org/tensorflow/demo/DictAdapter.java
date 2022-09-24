@@ -127,7 +127,6 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
         }
     }
 
-
     //검색 용
     public void filterList(ArrayList<Dict> filterList) {
         dict = filterList;

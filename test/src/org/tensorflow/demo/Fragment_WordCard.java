@@ -44,6 +44,7 @@ public class Fragment_WordCard extends Fragment {
     int[] ids;
     int[] userids;
     String[] images;
+    String[] urls;
     private int p_userId= MainActivity.p_userID;
     private String stringp_userId=String.valueOf(p_userId);
     //
@@ -78,7 +79,6 @@ public class Fragment_WordCard extends Fragment {
                 .build();
         retrofitInterface = retrofit.create(RetrofitInterface.class);
         HashMap<String, String> map=new HashMap<>();
-        //Log.e("확인 용",stringp_userId);
         map.put("UserId", stringp_userId);
 
         Call<JsonElement> call = retrofitInterface.getListAll(map);
@@ -98,12 +98,14 @@ public class Fragment_WordCard extends Fragment {
                     userids=new int[ListResponseArray.size()];
                     words=new String[ListResponseArray.size()];
                     images = new String[ListResponseArray.size()];
+                    urls=new String[ListResponseArray.size()];
 
 
                     for (int i=0; i<ListResponseArray.size();i++){
                         JsonElement jsonElement = ListResponseArray.get(i);
                         JsonElement jsonElement1= jsonElement.getAsJsonObject().get("WordDict");
                         String wordImg= jsonElement1.getAsJsonObject().get("wordImg").getAsString();
+                        String viurl=jsonElement1.getAsJsonObject().get("videoURL").getAsString();
                         int id = jsonElement.getAsJsonObject().get("id").getAsInt();
                         Boolean star = jsonElement.getAsJsonObject().get("star").getAsBoolean();
                         int uid=jsonElement.getAsJsonObject().get("UserId").getAsInt();
@@ -114,12 +116,13 @@ public class Fragment_WordCard extends Fragment {
                         userids[i]=uid;
                         words[i]=word;
                         images[i]=wordImg;
+                        urls[i]=viurl;
                     }
                     //userid 같은 것 들만 리사이클러에 추가
                     dataList.clear();
                     for (int i=0; i< ListResponseArray.size(); i++){
                         if(userids[i]==p_userId){
-                            dataList.add(new Data(ids[i],  userids[i], stars[i], words[i], images[i]));
+                            dataList.add(new Data(ids[i],  userids[i], stars[i], words[i], images[i], urls[i]));
                         }
                     }
                     System.out.println(dataList);
@@ -129,13 +132,12 @@ public class Fragment_WordCard extends Fragment {
                     recyclerView.setLayoutManager(mLayoutManager);
                     recyclerView.setAdapter(adapter);
 
-
                 }else{Log.e("AAA","내용물이 비어있습니다.");}
             }
             @Override
             public void onFailure(Call<JsonElement> call, Throwable t) {
                 Log.e("연결이", "실패했습니다...");
-                dataList.add(new Data(2,  p_userId, false, "예시", "https://drive.google.com/file/d/1dlslbcqaQGUkmIB1FT65uOVrWOkFE89p/view?usp=sharing"));
+                dataList.add(new Data(2,  p_userId, false, "예시", "https://drive.google.com/file/d/1dlslbcqaQGUkmIB1FT65uOVrWOkFE89p/view?usp=sharing", "http://drive.google.com/uc?export=view&id=1Fps5iXNIyEbDsfsGc_PVOURrxr63SRZU"));
                 adapter=new WordCardAdapter(context, dataList);
                 mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);
