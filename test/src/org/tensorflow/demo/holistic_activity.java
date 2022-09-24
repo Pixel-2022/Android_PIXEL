@@ -97,7 +97,7 @@ public class holistic_activity extends AppCompatActivity {
     // ApplicationInfo for retrieving metadata defined in the manifest.
     private ApplicationInfo applicationInfo;
 
-    float[][][] input_data = new float[1][30][368];
+    float[][][] input_data = new float[1][30][524];
     float[][] output_data = new float[1][4];
     int l = 0;
     Queue<Float> queue = new LinkedList<>();
@@ -195,21 +195,21 @@ public class holistic_activity extends AppCompatActivity {
                                         //1. 배열에 계산된 좌표값을 30개씩 받아와야 함. (String[] -> Float)
                                         //1-(1). 배열은 stack형식으로 받아야 함!!
                                         if (l < 30) {
-                                            for (int j = 0; j < 432; j++) {
+                                            for (int j = 0; j < 524; j++) {
                                                 queue.offer(Float.parseFloat(strArr[j]));
                                                 Log.e("큐 offer1", String.valueOf(queue.size()));
                                             }
                                             l++;
 
                                         } else {
-                                            for (int j = 0; j < 432; j++) {
+                                            for (int j = 0; j < 524; j++) {
                                                 queue.poll();
                                                 queue.offer(Float.parseFloat(strArr[j]));
                                             }
                                             Iterator iter = queue.iterator();
                                             while (iter.hasNext()) {
                                                 for (int j = 0; j < 30; j++) {
-                                                    for (int k = 0; k < 432; k++) {
+                                                    for (int k = 0; k < 524; k++) {
                                                         input_data[0][j][k] = (float) iter.next();
                                                     }
                                                 }
