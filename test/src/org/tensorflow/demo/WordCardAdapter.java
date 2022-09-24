@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +13,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +39,8 @@ public class WordCardAdapter extends RecyclerView.Adapter<WordCardAdapter.ItemVi
     private String stringp_userId=String.valueOf(p_userId);
     int del=-1;
 
+    private Context context;
+
     private LayoutInflater inflater;
     //adapter에 들어갈 list
     private ArrayList<Data> data;
@@ -46,6 +53,7 @@ public class WordCardAdapter extends RecyclerView.Adapter<WordCardAdapter.ItemVi
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        this.context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.wordcard_item, parent, false);
         return new ItemViewHolder(view);
     }
@@ -69,6 +77,7 @@ public class WordCardAdapter extends RecyclerView.Adapter<WordCardAdapter.ItemVi
         private ImageView wordImage;
         private LinearLayout expanded;
         private ImageButton wordDeleteBtn;
+        private ImageButton viBtn;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -77,6 +86,7 @@ public class WordCardAdapter extends RecyclerView.Adapter<WordCardAdapter.ItemVi
             wordImage = itemView.findViewById(R.id.wordImage);
             expanded = itemView.findViewById(R.id.expandedLayout);
             wordDeleteBtn = itemView.findViewById(R.id.wordDeleteBtn);
+            viBtn=itemView.findViewById(R.id.wordFilmBtn);
 
             mView.setOnClickListener(new View.OnClickListener(){
                 //클릭 했을 때 펼쳐지기
@@ -96,6 +106,14 @@ public class WordCardAdapter extends RecyclerView.Adapter<WordCardAdapter.ItemVi
                 public void onClick(View v){
                     int position=getAdapterPosition();
                     custom_dialog(v, position);
+                }
+            });
+
+            viBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    custom_dialog2(v, getAdapterPosition());
+                    Log.d("비디오에서도 position이 나오나요?", String.valueOf(getAdapterPosition()));
                 }
             });
         }
@@ -155,6 +173,41 @@ public class WordCardAdapter extends RecyclerView.Adapter<WordCardAdapter.ItemVi
         cancel_btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    public void custom_dialog2(View v, int position) {
+        Data data2 = data.get(position);
+        VideoView vv;
+        View dialogView = inflater.inflate(R.layout.dialog_video, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        builder.setView(dialogView);
+
+        vv = dialogView.findViewById(R.id.videoV);
+        //URL서ㅕㄹ정
+        Uri videoUri = Uri.parse(data2.getVideoURL());
+        vv.setMediaController(new MediaController(context));
+        vv.setVideoURI(videoUri);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                //비디오 시작
+                vv.start();
+            }
+        });
+
+        TextView ok_btn = dialogView.findViewById(R.id.ok_btn);
+        ok_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 alertDialog.dismiss();
             }
         });

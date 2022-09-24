@@ -6,13 +6,15 @@ public class Data {
     private int UserId;
     private String Word;
     private String image;
+    String videoURL;
 
-    public Data(int id, int userid, Boolean star, String Word, String image){
+    public Data(int id, int userid, Boolean star, String Word, String image, String videoURL){
         this.id = id;
         this.UserId=userid;
         this.Word = Word;
         this.star = star;
         this.image=image;
+        this.videoURL=videoURL;
     }
     public int getid(){
         return id;
@@ -40,5 +42,7 @@ public class Data {
     }
     public String getImage() {return image;}
     public void setImage(String image) {this.image = image;}
+    public String getVideoURL(){return videoURL;}
+    public void setVideoURL(String vu){videoURL=vu;}
 }
 
