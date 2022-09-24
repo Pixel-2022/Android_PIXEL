@@ -73,9 +73,9 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 //로그인 핸들러 호출
-                handleLogin();
-                //Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                //startActivity(intent);
+                //handleLogin();
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
             }
         });
         //비밀번호 찾기
