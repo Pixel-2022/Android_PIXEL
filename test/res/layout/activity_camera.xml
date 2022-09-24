@@ -20,7 +20,7 @@
     android:background="#FBD3CB"
     >
     <android.widget.Button
-        android:id="@+id/BackBtn"
+        android:id="@+id/BackBtn1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="돌아가기"

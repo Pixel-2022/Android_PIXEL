@@ -22,6 +22,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
@@ -37,6 +38,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Trace;
+import android.util.Log;
 import android.util.Size;
 import android.view.KeyEvent;
 import android.view.Surface;
@@ -86,7 +88,10 @@ public abstract class CameraActivity extends Activity
   private RecyclerView.LayoutManager mLayoutmanager;
   List<Yolo_data> dataList =new ArrayList<>();
 
+  private Button backBtn1;
   Button save;
+  private ApplicationInfo applicationInfo;
+  private static final String TAG = "MainActivity";
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
@@ -102,6 +107,20 @@ public abstract class CameraActivity extends Activity
 
     dataList.add(new Yolo_data("하이"));
     recyclerView.setAdapter(adapter);
+
+    backBtn1 = findViewById(R.id.BackBtn1);
+    backBtn1.setOnClickListener(new View.OnClickListener(){
+      @Override
+      public void onClick(View view){
+        finish();
+      }
+    });
+    try {
+      applicationInfo =
+              getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+    } catch (PackageManager.NameNotFoundException e) {
+      Log.e(TAG, "Cannot find application info: " + e);
+    }
 
     save=findViewById(R.id.stuff_save);
     save.setOnClickListener(new View.OnClickListener() {

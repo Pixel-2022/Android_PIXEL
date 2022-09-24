@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
         //로그인한 사용자 정보 전역변수에 저장
 
-        //p_name = "123";
-        //p_email = "123";
-        //p_password = "456";
-        //p_userID = 2;
+        p_name = "123";
+        p_email = "123";
+        p_password = "456";
+        p_userID = 2;
 
 
 //        p_name = bundle.getString("name");

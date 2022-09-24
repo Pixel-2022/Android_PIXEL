@@ -34,6 +34,12 @@ public class FragmentPage3 extends Fragment {
         Button logout=v.findViewById(R.id.setLogout);
         TextView notice=v.findViewById(R.id.setNotice);
         TextView ask=v.findViewById(R.id.setAsk);
+        TextView name=v.findViewById(R.id.setNick);
+        TextView id=v.findViewById(R.id.setId);
+
+        name.setText(p_name);
+        id.setText(p_email);
+
 
         //로그아웃 시 로그인 페이지로
         logout.setOnClickListener(new View.OnClickListener() {
