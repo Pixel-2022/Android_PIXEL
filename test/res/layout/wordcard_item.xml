@@ -42,13 +42,6 @@
                     android:layout_gravity="center"
                     android:gravity="center">
                     <ImageButton
-                        android:id="@+id/wordStarBtn"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:background="@drawable/star"
-                        android:layout_marginBottom="10dp"
-                        />
-                    <ImageButton
                         android:id="@+id/wordFilmBtn"
                         android:layout_width="40dp"
                         android:layout_height="50dp"
