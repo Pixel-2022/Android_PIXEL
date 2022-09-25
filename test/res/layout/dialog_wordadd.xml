@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="단어장에 \n추가되었습니다."
+            android:text="단어장에 \n추가하시겠습니까?."
             android:textSize="30dp"
             android:textStyle="bold"
             android:textColor="#ffffff"
@@ -38,7 +38,18 @@
             android:textSize="20dp"
             android:background="@drawable/dialog_round"
             android:gravity="center" />
-
+        <TextView
+            android:id="@+id/no_btn"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:text="아니요"
+            android:textSize="20dp"
+            android:background="@drawable/dialog_round"
+            android:gravity="center" />
     </LinearLayout>
 
 </LinearLayout>

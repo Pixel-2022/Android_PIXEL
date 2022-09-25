@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,8 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
     private int prePosition = -1;
     //
     private ArrayList<Dict> dict;
+
+    Context ct;
 
     public DictAdapter(Context context, ArrayList<Dict> dict) {
         this.inflater = LayoutInflater.from(context);
@@ -144,6 +147,13 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         TextView ok_btn = dialogView.findViewById(R.id.ok_btn);
+        TextView no_btn = dialogView.findViewById(R.id.no_btn);
+        no_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                alertDialog.dismiss();
+            }
+        });
         ok_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,6 +179,7 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
                         if (response.code() == 200) {
                             Log.e("('a' ", "추가 성공!");
                         } else {
+                            Toast.makeText(v.getContext(), "이미 추가된 단어입니다.", Toast.LENGTH_SHORT).show();
                             Log.e("(._. ", "추가 실패!");
                         }
                     }
