@@ -1,12 +1,22 @@
 package org.tensorflow.demo;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,9 +36,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class QuizActivity extends AppCompatActivity {
+    private Context context;
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
     private Button backBtn;
+    private Button hint;
     private ImageView imgview;
     private static final String TAG = "QuizActivity";
     ArrayList<Dict> dictlist=new ArrayList();
@@ -36,6 +48,7 @@ public class QuizActivity extends AppCompatActivity {
     String[] images;
     String selectImage;
     String[] videoURLs;
+    int rannum;
     private String BASE_URL=LoginActivity.getBASE_URL();
 
     // ApplicationInfo for retrieving metadata defined in the manifest.
@@ -44,6 +57,7 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
         setContentView(R.layout.quiz_activity);
         imgview=findViewById(R.id.dict_image);
 
@@ -72,7 +86,8 @@ public class QuizActivity extends AppCompatActivity {
                     //딕트리스트에 사전 단어들 저장.
                     dictlist.add(new Dict(names[i], images[i], videoURLs[i]));
                 }
-                selectImage=getRandom(images);
+                rannum=getRandom(images);
+                selectImage=images[rannum];
                 Glide.with(imgview.getContext()).load(selectImage).into(imgview);
             }
             @Override
@@ -94,11 +109,55 @@ public class QuizActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, "Cannot find application info: " + e);
         }
+        hint=findViewById(R.id.hint_btn);
+        hint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                custom_dialog2(v,rannum);
+            }
+        });
+
     }
-    public static String getRandom(String[] array) {
+    public static int getRandom(String[] array) {
         int rnd = new Random().nextInt(array.length);
-        //Log.e("랜덤", String.valueOf(rnd));
-        return array[rnd];
+        //return array[rnd];
+        return rnd;
     }
 
+    public void custom_dialog2(View v, int position) {
+
+        Dict dict2 = dictlist.get(position);
+        VideoView vv;
+        View dialogView=getLayoutInflater().inflate(R.layout.dialog_video, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        builder.setView(dialogView);
+
+        vv = dialogView.findViewById(R.id.videoV);
+        //URL서ㅕㄹ정
+        Uri videoUri = Uri.parse(dict2.getVideoURL());
+        vv.setMediaController(new MediaController(context));
+        vv.setVideoURI(videoUri);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                //비디오 시작
+                //mediaPlayer.setDataSource();
+                vv.start();
+            }
+        });
+
+        TextView ok_btn = dialogView.findViewById(R.id.ok_btn);
+        ok_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+    }
 }
