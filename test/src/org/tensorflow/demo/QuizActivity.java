@@ -35,7 +35,6 @@ public class QuizActivity extends AppCompatActivity {
     String[] names;
     String[] images;
     String selectImage;
-    int state=-1;
     String[] videoURLs;
     private String BASE_URL=LoginActivity.getBASE_URL();
 
@@ -47,7 +46,6 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_activity);
         imgview=findViewById(R.id.dict_image);
-
 
         //사전에서 받아와서 랜덤하게 띄우겠습니다.
         retrofit = new Retrofit.Builder()
@@ -74,19 +72,14 @@ public class QuizActivity extends AppCompatActivity {
                     //딕트리스트에 사전 단어들 저장.
                     dictlist.add(new Dict(names[i], images[i], videoURLs[i]));
                 }
-                state=1;
+                selectImage=getRandom(images);
+                Glide.with(imgview.getContext()).load(selectImage).into(imgview);
             }
             @Override
             public void onFailure(Call<JsonElement> call, Throwable t) {
                 Log.e("퀴즈 연결 실패","연결 실패");
             }
         });
-
-        if(state>-1){
-            selectImage=getRandom(images);
-            Glide.with(imgview.getContext()).load(selectImage).into(imgview);
-            state=-1;
-        }
 
         backBtn = findViewById(R.id.BackBtn);
         backBtn.setOnClickListener(new View.OnClickListener(){
@@ -101,10 +94,10 @@ public class QuizActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, "Cannot find application info: " + e);
         }
-
     }
     public static String getRandom(String[] array) {
         int rnd = new Random().nextInt(array.length);
+        //Log.e("랜덤", String.valueOf(rnd));
         return array[rnd];
     }
 
