@@ -85,7 +85,7 @@ public class Fragment_WordDict extends Fragment {
                     images[i]=wordImg;
                     videoURLs[i] = videoURL;
                     dataList.add(new Dict(names[i], images[i], videoURLs[i]));
-                }
+                    }
                 Log.e("dataList : ",dataList.get(0).getWord());
                 adapter=new DictAdapter(context, dataList);
 
