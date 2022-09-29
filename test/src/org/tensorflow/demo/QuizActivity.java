@@ -36,7 +36,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class QuizActivity extends AppCompatActivity {
-    private Context context;
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
     private Button backBtn;
@@ -57,7 +56,6 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getApplicationContext();
         setContentView(R.layout.quiz_activity);
         imgview=findViewById(R.id.dict_image);
 
@@ -113,42 +111,42 @@ public class QuizActivity extends AppCompatActivity {
         hint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                custom_dialog2(v,rannum);
+                custom_dialog3(rannum);
             }
         });
 
     }
     public static int getRandom(String[] array) {
         int rnd = new Random().nextInt(array.length);
-        //return array[rnd];
         return rnd;
     }
 
-    public void custom_dialog2(View v, int position) {
+    public void custom_dialog3(int position) {
 
         Dict dict2 = dictlist.get(position);
-        VideoView vv;
+
+        VideoView vv2;
         View dialogView=getLayoutInflater().inflate(R.layout.dialog_video, null);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
         builder.setView(dialogView);
 
-        vv = dialogView.findViewById(R.id.videoV);
-        //URL서ㅕㄹ정
+
+        vv2 = dialogView.findViewById(R.id.videoV);
+
         Uri videoUri = Uri.parse(dict2.getVideoURL());
-        vv.setMediaController(new MediaController(context));
-        vv.setVideoURI(videoUri);
+        vv2.setMediaController(new MediaController(QuizActivity.this));
+        vv2.setVideoURI(videoUri);
 
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        vv2.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 //비디오 시작
-                //mediaPlayer.setDataSource();
-                vv.start();
+                vv2.start();
             }
         });
 
