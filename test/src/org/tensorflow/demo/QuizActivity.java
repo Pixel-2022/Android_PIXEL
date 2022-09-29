@@ -2,6 +2,7 @@ package org.tensorflow.demo;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -40,6 +41,7 @@ public class QuizActivity extends AppCompatActivity {
     private RetrofitInterface retrofitInterface;
     private Button backBtn;
     private Button hint;
+    private Button action;
     private ImageView imgview;
     private static final String TAG = "QuizActivity";
     ArrayList<Dict> dictlist=new ArrayList();
@@ -107,6 +109,14 @@ public class QuizActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, "Cannot find application info: " + e);
         }
+        action=findViewById(R.id.quiz_act);
+        action.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent actintent = new Intent(getApplicationContext(), quiz_media.class);
+                startActivity(actintent);
+            }
+        });
         hint=findViewById(R.id.hint_btn);
         hint.setOnClickListener(new View.OnClickListener() {
             @Override

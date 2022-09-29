@@ -21,16 +21,7 @@
         android:layout_marginBottom="10dp"
         android:text="다음 그림을 보고 \n수어 동작으로 표현해보세요">
     </TextView>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="맞았습니다!"
-        android:layout_gravity="center"
-        android:textColor="#EA6E6E"
-        android:textSize="20dp"
-        android:visibility="gone">
 
-    </TextView>
 
 <!--일단은 카메라를 gone으로 해두었으나, 상황을 보고 다른 activity로 빼거나 하면 될 듯-->
     <FrameLayout
@@ -66,6 +57,7 @@
             android:layout_gravity="center">
 
             <android.widget.Button
+                android:id="@+id/quiz_act"
                 android:layout_width="10dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"

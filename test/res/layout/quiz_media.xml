@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical"
+    android:background="#5D5D79">
+
+    <Button
+        android:id="@+id/BackBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="돌아가기"
+        android:backgroundTint="@color/black"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:textColor="#FBFBFF"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="동작인식결과">
+    </TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="맞았습니다!"
+        android:layout_gravity="center"
+        android:textColor="#EA6E6E"
+        android:textSize="20dp"
+        android:visibility="gone">
+
+    </TextView>
+
+    <FrameLayout
+        android:id="@+id/preview_display_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="516dp"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:id="@+id/no_camera_access_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:text="no_camera_access" />
+    </FrameLayout>
+
+</LinearLayout>
