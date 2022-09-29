@@ -96,14 +96,19 @@ public class holistic_activity extends AppCompatActivity {
 
     // ApplicationInfo for retrieving metadata defined in the manifest.
     private ApplicationInfo applicationInfo;
-
     float[][][] input_data = new float[1][30][524];
-    float[][] output_data = new float[1][4];
+    float[][] output_data = new float[1][3];
     int l = 0;
     Queue<Float> queue = new LinkedList<>();
     Queue<Integer> answerQueue = new LinkedList<>();
 
-    String[] motion = {"안녕하세요","먹다","밥","만나다"};
+//    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다",
+//            "먹다","미안","비빔밥","사람","시다","쓰다","아깝다","안경","안녕","앉다",
+//            "어디","어제","언제","얼굴","여동생","오전","오토바이","오후","좋다","지금",
+//            "책","컵","휴대폰"};
+//    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다","먹다"};
+    String[] motion = {"가족","감사","괜찮아"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,22 +171,24 @@ public class holistic_activity extends AppCompatActivity {
 //                                        + packet.getTimestamp()
 //                                        + "] "
 //                                        + getPoseLandmarksDebugString(poseLandmarks));
+
                         LandmarkMap.put("face",getPoseLandmarksDebugAry(poseLandmarks));
+//                        Log.e("입력된 값", String.valueOf(getPoseLandmarksDebugAry(poseLandmarks)));
                         if(LandmarkMap.get("leftHand")==null && LandmarkMap.get("rightHand")==null){
-                            answerFrame.setText("손이 보이지 않아서 인식이 되지 않아요");
+//                            answerFrame.setText("손이 보이지 않아서 인식이 되지 않아요");
                         }else {
                             Call<JsonElement> callAPI = retrofitClient.getApi().sendLandmark(LandmarkMap);
+                            Log.e("입력된 값", String.valueOf(LandmarkMap));
 
 
-                            // Landmark Map 값 초기화
-                            LandmarkMap.put("pose", null);
-                            LandmarkMap.put("leftHand", null);
-                            LandmarkMap.put("rightHand", null);
-                            LandmarkMap.put("face", null);
                             callAPI.enqueue(new Callback<JsonElement>() {
                                 @Override
                                 public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-
+                                    // Landmark Map 값 초기화
+                                    LandmarkMap.put("pose", null);
+                                    LandmarkMap.put("leftHand", null);
+                                    LandmarkMap.put("rightHand", null);
+                                    LandmarkMap.put("face", null);
                                     // api로부터 받은 계산된 좌표값을 모델의 input 형태에 맞게 변환 (JsonElement -> JsonArray -> String -> String[])
                                     JsonArray DictResponseArray = response.body().getAsJsonArray();
                                     Log.e("받아온 값", String.valueOf(DictResponseArray));
@@ -197,10 +204,9 @@ public class holistic_activity extends AppCompatActivity {
                                         if (l < 30) {
                                             for (int j = 0; j < 524; j++) {
                                                 queue.offer(Float.parseFloat(strArr[j]));
-                                                Log.e("큐 offer1", String.valueOf(queue.size()));
+//                                                Log.e("큐 offer1", String.valueOf(queue.size()));
                                             }
                                             l++;
-
                                         } else {
                                             for (int j = 0; j < 524; j++) {
                                                 queue.poll();
@@ -215,58 +221,59 @@ public class holistic_activity extends AppCompatActivity {
                                                 }
                                             }
                                             // 2. 30개가 되면 모델에게 보내기
-                                            Interpreter lite = getTfliteInterpreter("AAAA6.tflite");
+                                            Interpreter lite = getTfliteInterpreter("AAAA13.tflite");
                                             lite.run(input_data, output_data);
-
-                                            Log.e("번역된 값이에요", String.valueOf(output_data[0][0]) + " " + String.valueOf(output_data[0][1]) + " " + String.valueOf(output_data[0][2]) + " " + String.valueOf(output_data[0][3]));
-
-                                        }
-
-                                        //3. output을 텍스트 뷰에 띄워주기
-
-                                        // 3-(1). output_data에서 확률이 제일 큰 값을 AND 0.9이상일때만 출력하기
-                                        if ((output_data[0][0] >= 0.7 || output_data[0][1] >= 0.7) || output_data[0][2] >= 0.7 || output_data[0][3] >= 0.7) {
-                                            // 3-(2). 배열의 max값에 해당하는 motion 데이터 값 출력하기
+                                            // 3. 모델에서 계산된 분석값을 이용해 올바른 번역 결과 보여주기
+                                            // 3-(1). 모델에서 계산된 단어 별 분석값을 로그에 출력
+                                            for(int l=0; l<3; l++){
+                                                Log.e("최고가 되고 싶은 분석 값",String.valueOf(l)+":"+String.valueOf(output_data[0][l]));
+                                            }
+                                            // 3-(2). 분석값 중 최고값을 찾기 maxNum:최고값, maxLoc:최고값의 배열 내 위치
                                             float maxNum = 0;
                                             int maxLoc = -1;
-                                            for (int x = 0; x < output_data.length; x++) {
+                                            for (int x = 0; x < 3; x++) {
                                                 if (maxNum < output_data[0][x]) {
                                                     maxNum = output_data[0][x];
                                                     maxLoc = x;
                                                 }
                                             }
-                                            //maxLoc값을 5개 받는다
-                                            answerQueue.offer(maxLoc);
-                                            //값이 5개가 되면 각 원소들이 모두 일치하는지 확인한다.
-                                            if(answerQueue.size()==5){
+                                            Log.e("최고값!!!",String.valueOf(maxNum));
 
-                                            }
-                                                //값이 같다면, 그대로 출력하기
-                                            //새로운 6번째 값이 들어오면 poll후 offer한다.
-                                            if(answerQueue.size()<5){
-                                                answerQueue.offer(maxLoc);
-                                            }else{
-                                                answerQueue.poll();
-                                                answerQueue.offer(maxLoc);
-                                                Iterator answeriter = answerQueue.iterator();
-                                                while (answeriter.hasNext()) {
-                                                    for (int j = 0; j < 4; j++) {
-//                                                        answeriter.next()
+                                            // 3-(3). 정확도를 높이기 위해 (1)최고값이 0.7이상이고 (2)최고값이 5번 연속으로 출력되어야만 옳은 결과값으로 선택하기
+                                                if(maxNum >= 0.5){
+
+                                                    //🎃최고값이 5번 연속 출력될 때의 조건 구현 아직 못 했음.. (._.
+
+                                                    //maxLoc값을 5개 받는다
+//                                            answerQueue.offer(maxLoc);
+                                                    //값이 5개가 되면 각 원소들이 모두 일치하는지 확인한다.
+//                                            if(answerQueue.size()==5){
+//
+//                                            }
+                                                    //값이 같다면, 그대로 출력하기
+                                                    //새로운 6번째 값이 들어오면 poll후 offer한다.
+//                                            if(answerQueue.size()<5){
+//                                                answerQueue.offer(maxLoc);
+//                                            }else{
+//                                                answerQueue.poll();
+//                                                answerQueue.offer(maxLoc);
+//                                                Iterator answeriter = answerQueue.iterator();
+//                                                while (answeriter.hasNext()) {
+//                                                    for (int j = 0; j < 4; j++) {
+////                                                        answeriter.next()
+//                                                    }
+//                                                }
+//                                            }
+                                                    // 3-(4). 올바른 번역값 출력하기
+                                                    if (maxLoc != -1) {
+                                                        Log.e("번역 : ", motion[maxLoc]);
+                                                        answerFrame.setText(motion[maxLoc]);
                                                     }
-                                                }
+                                                } else {//분석값이 낮아서 무슨 동작인지 인식이 되지 않을 때
+//                                                answerFrame.setText("  ");
                                             }
-
-
-                                            if (maxLoc != -1) {
-                                                Log.e("번역 : ", motion[maxLoc]);
-                                                answerFrame.setText(motion[maxLoc]);
-                                            }
-
-                                        } else {
-                                            answerFrame.setText("뭘까요?");
                                         }
 
-//                                    }
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -356,13 +363,7 @@ public class holistic_activity extends AppCompatActivity {
         PermissionHelper.checkAndRequestCameraPermissions(this);
 
 
-// Flask의 REST API와의 연결 (목적 : 카메라로 인식한 좌표값 API에게 보내서 계산된 좌표값을 받아오는 코드)
-
-
-
-
     }
-
 
     // 좌표값 숫자 배열로 변환해서 반환하는 코드
     private static float[][] getPoseLandmarksDebugAry(LandmarkProto.NormalizedLandmarkList poseLandmarks){

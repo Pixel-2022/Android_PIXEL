@@ -105,7 +105,7 @@ public abstract class CameraActivity extends Activity
     recyclerView.setLayoutManager(mLayoutmanager);
     adapter=new Yolo_Adapter(getApplication(), dataList);
 
-    dataList.add(new Yolo_data("하이"));
+//    dataList.add(new Yolo_data("하이"));
     recyclerView.setAdapter(adapter);
 
     backBtn1 = findViewById(R.id.BackBtn1);
@@ -127,10 +127,12 @@ public abstract class CameraActivity extends Activity
       @Override
       public void onClick(View v) {
         dataList.clear();
+
         for (int i=0; i<Y_names.size(); i++){
           dataList.add(new Yolo_data(Y_names.get(i)));
         }
         recyclerView.setAdapter(adapter);
+        Y_names.clear();
       }
     });
 
