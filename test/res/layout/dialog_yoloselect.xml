@@ -2,52 +2,70 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
     android:layout_height="200dp"
-    android:orientation="vertical"
-    android:background="@drawable/dialog_round">
+    android:background="@drawable/dialog_round"
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:orientation="vertical"
         android:gravity="center"
-        >
-                    <android.widget.Button
-                        android:id="@+id/videoBtn"
-                        android:layout_width="150dp"
-                        android:layout_height="45dp"
-                        android:background="@drawable/round_white"
-                        android:text="수화 영상 보기"
-                        android:textColor="#5D5D79"
-                        android:textSize="15dp"
-                        />
-                    <android.widget.Button
-                        android:id="@+id/saveBtn"
-                        android:layout_width="150dp"
-                        android:layout_height="45dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/round_white"
-                        android:text="단어장에 저장"
-                        android:textColor="#5D5D79"
-                        android:textSize="15dp"/>
+        android:orientation="vertical">
+
+        <android.widget.Button
+            android:id="@+id/videoBtn"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:background="@drawable/round_white"
+            android:text="수화 영상 보기"
+            android:textColor="#5D5D79"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:id="@+id/saveBtn"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/round_white"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:src="@drawable/film" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="단어장에 저장"
+                android:textColor="#5D5D79"
+                android:textSize="15dp" />
+        </LinearLayout>
+
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@drawable/dialog_round2"
-        android:gravity="center"
-        >
+        android:gravity="center">
 
         <TextView
             android:id="@+id/out_btn"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
-            android:textStyle="bold"
-            android:textColor="#ffffff"
-            android:text="나가기"
-            android:textSize="20dp"
+            android:layout_marginRight="30dp"
             android:background="@drawable/dialog_round"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="나가기"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>

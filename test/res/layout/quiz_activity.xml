@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:orientation="vertical"
-    android:background="#5D5D79">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#5D5D79"
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/BackBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="돌아가기"
         android:backgroundTint="@color/black"
-        />
+        android:text="돌아가기" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="30dp"
-        android:textColor="#FBFBFF"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:text="다음 그림을 보고 \n수어 동작으로 표현해보세요">
-    </TextView>
+        android:gravity="center"
+        android:text="다음 그림을 보고 \n수어 동작으로 표현해보세요"
+        android:textColor="#FBFBFF"
+        android:textSize="30dp"></TextView>
 
 
-<!--일단은 카메라를 gone으로 해두었으나, 상황을 보고 다른 activity로 빼거나 하면 될 듯-->
+    <!--일단은 카메라를 gone으로 해두었으나, 상황을 보고 다른 activity로 빼거나 하면 될 듯-->
     <FrameLayout
         android:id="@+id/preview_display_layout"
         android:layout_width="match_parent"
@@ -38,19 +38,21 @@
             android:gravity="center"
             android:text="no_camera_access" />
     </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="visible">
+
         <ImageView
             android:id="@+id/dict_image"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
-            />
+            android:layout_marginBottom="30dp" />
+
         <LinearLayout
             android:layout_width="200dp"
             android:layout_height="wrap_content"
@@ -64,30 +66,36 @@
                 android:layout_weight="1"
                 android:background="@drawable/round_click"
                 android:text="동작 시작!!"
-                android:textSize="20dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="20dp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="200dp"
+            android:id="@+id/hint_btn"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:background="@drawable/card_round"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:src="@drawable/film" />
+
             <android.widget.Button
-                android:id="@+id/hint_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/card_round"
-                android:text="힌트"
-                android:textSize="20dp"
-                android:textColor="@color/black"
                 android:layout_weight="1"
-                android:layout_margin="8dp"
-                />
-
+                android:gravity="left"
+                android:text="힌트"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
         </LinearLayout>
     </LinearLayout>
-
-
 
 
 </LinearLayout>
