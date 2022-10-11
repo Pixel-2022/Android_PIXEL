@@ -321,6 +321,8 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                 canvas.drawRect(location, paint);
 
                 cropToFrameTransform.mapRect(location);
+                result.setLocation(location);
+
                 String resultToKorean = null;
                 
                 switch(result.getTitle()){

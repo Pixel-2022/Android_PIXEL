@@ -23,6 +23,9 @@ public interface RetrofitInterface {
     @GET("/dict/dictAll")
     Call<JsonElement> getDictAll();
 
+    @POST("/dict/word")
+    Call<JsonElement> getDictWord(@Body HashMap<String, String> map);
+
     @POST("/wordList/listAll")
     Call<JsonElement> getListAll(@Body HashMap<String, String> map);
 
