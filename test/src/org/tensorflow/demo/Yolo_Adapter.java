@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,6 +38,10 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
     private int p_userId = MainActivity.p_userID;
     private String stringp_userId = String.valueOf(p_userId);
     private String selectedWord;
+
+    //단어사전
+    ArrayList<Dict> dataList1=new ArrayList();
+    String url;
 
     public Yolo_Adapter(Context context, List<Yolo_data> yolo_data){
         this.inflater = LayoutInflater.from(context);
@@ -118,6 +123,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
                             Log.e("햄이네 박사 : ", "단어가 DB에 있다네");
 //                            DB에 단어가 있으면,
 //                            해당 단어의 영상을 보여줄 겁니다.
+                            url=wordVideo();
                             Log.e("햄이네",DictResponseArray.getAsJsonObject().get("videoURL").getAsString());
                         } else {
                             Toast.makeText(v.getContext(), "DB에 없는 단어입니다. 추후 업데이트 될 예정입니다.", Toast.LENGTH_SHORT).show();
@@ -174,6 +180,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
             }
         });
     }
+
     public void wordAdd(){
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -202,5 +209,37 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
                 Log.e("('-' 여기는 딕트 (", "연결 실패!");
             }
         });
+    }
+
+    public String wordVideo(){
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        retrofitInterface = retrofit.create(RetrofitInterface.class);
+
+        Call<JsonElement> call2 = retrofitInterface.getDictAll();
+        call2.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                JsonArray DictResponseArray = response.body().getAsJsonArray();
+
+                for (int i=0; i<DictResponseArray.size();i++){
+                    JsonElement jsonElement = DictResponseArray.get(i);
+                    String name = jsonElement.getAsJsonObject().get("Word").getAsString();
+                    String videoURL = jsonElement.getAsJsonObject().get("videoURL").getAsString();
+                    String wordImg = jsonElement.getAsJsonObject().get("wordImg").getAsString();
+                    if(name==selectedWord){
+                        dataList1.add(new Dict(name, wordImg, videoURL));
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+                Log.e("여기는 욜로 어댑터","영상 실패");
+            }
+        });
+        return dataList1.get(0).getVideoURL();
     }
 }
