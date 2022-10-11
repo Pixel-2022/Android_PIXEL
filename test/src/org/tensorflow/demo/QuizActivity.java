@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -40,7 +41,7 @@ public class QuizActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
     private Button backBtn;
-    private Button hint;
+    private LinearLayout hint;
     private Button action;
     private ImageView imgview;
     private static final String TAG = "QuizActivity";

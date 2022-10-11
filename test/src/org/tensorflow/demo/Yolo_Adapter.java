@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -101,7 +102,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
         alertDialog.show();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 //      해당 단어에 대한 수어 영상을 보여준다.
-        Button videoBtn = dialogView.findViewById(R.id.videoBtn);
+        LinearLayout videoBtn = dialogView.findViewById(R.id.videoBtn);
         videoBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -145,15 +146,12 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
                 call2.enqueue(new Callback<JsonElement>() {
                     @Override
                     public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-//                        JsonArray DictResponseArray = response.body().getAsJsonArray();
                         if (response.code() == 201) {
+                            Toast.makeText(v.getContext(),"단어장에 추가되었습니다",Toast.LENGTH_SHORT);
                             Log.e("햄이네 박사 : ", "단어가 DB에 있다네");
-//                            DB에 단어가 있으면,
-//                            단어카드에 해당 단어를 추가할게요
                             wordAdd();
-//사용자에게 단어가 추가되었다는 사실과 이미 추가된 단어라는 것을 알려야 함
                         } else {
-                            Toast.makeText(v.getContext(), "DB에 없는 단어입니다. 추후 업데이트 될 예정입니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(v.getContext(), "[추가 실패] DB에 없는 단어입니다. 추후 업데이트 될 예정입니다.", Toast.LENGTH_SHORT).show();
                             Log.e("햄이네 박사 : ", "그런 단어는 없다네");
                         }
                     }

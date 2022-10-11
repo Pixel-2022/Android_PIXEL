@@ -11,21 +11,12 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <android.widget.Button
+        <LinearLayout
             android:id="@+id/videoBtn"
             android:layout_width="150dp"
             android:layout_height="45dp"
-            android:background="@drawable/round_white"
-            android:text="수화 영상 보기"
-            android:textColor="#5D5D79"
-            android:textSize="15dp" />
-
-        <LinearLayout
-            android:id="@+id/saveBtn"
-            android:layout_width="150dp"
-            android:layout_height="45dp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/round_white"
             android:gravity="center"
             android:orientation="horizontal">
@@ -36,16 +27,21 @@
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
                 android:src="@drawable/film" />
-
-            <TextView
+            <android.widget.Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="단어장에 저장"
+                android:text="수화 영상 보기"
                 android:textColor="#5D5D79"
                 android:textSize="15dp" />
         </LinearLayout>
-
+        <android.widget.Button
+            android:id="@+id/saveBtn"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:background="@drawable/round_white"
+            android:text="단어장에 저장"
+            android:textColor="#5D5D79"
+            android:textSize="15dp" />
     </LinearLayout>
 
     <LinearLayout
