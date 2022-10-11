@@ -97,7 +97,7 @@ public class holistic_activity extends AppCompatActivity {
     // ApplicationInfo for retrieving metadata defined in the manifest.
     private ApplicationInfo applicationInfo;
     float[][][] input_data = new float[1][30][524];
-    float[][] output_data = new float[1][3];
+    float[][] output_data = new float[1][10];
     int l = 0;
     Queue<Float> queue = new LinkedList<>();
     Queue<Integer> answerQueue = new LinkedList<>();
@@ -106,8 +106,8 @@ public class holistic_activity extends AppCompatActivity {
 //            "먹다","미안","비빔밥","사람","시다","쓰다","아깝다","안경","안녕","앉다",
 //            "어디","어제","언제","얼굴","여동생","오전","오토바이","오후","좋다","지금",
 //            "책","컵","휴대폰"};
-//    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다","먹다"};
-    String[] motion = {"가족","감사","괜찮아"};
+    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다"};
+//    String[] motion = {"가족","감사","괜찮아"};
 
 
     @Override
@@ -221,17 +221,17 @@ public class holistic_activity extends AppCompatActivity {
                                                 }
                                             }
                                             // 2. 30개가 되면 모델에게 보내기
-                                            Interpreter lite = getTfliteInterpreter("AAAA13.tflite");
+                                            Interpreter lite = getTfliteInterpreter("AAAA17.tflite");
                                             lite.run(input_data, output_data);
                                             // 3. 모델에서 계산된 분석값을 이용해 올바른 번역 결과 보여주기
                                             // 3-(1). 모델에서 계산된 단어 별 분석값을 로그에 출력
-                                            for(int l=0; l<3; l++){
+                                            for(int l=0; l<10; l++){
                                                 Log.e("최고가 되고 싶은 분석 값",String.valueOf(l)+":"+String.valueOf(output_data[0][l]));
                                             }
                                             // 3-(2). 분석값 중 최고값을 찾기 maxNum:최고값, maxLoc:최고값의 배열 내 위치
                                             float maxNum = 0;
                                             int maxLoc = -1;
-                                            for (int x = 0; x < 3; x++) {
+                                            for (int x = 0; x < 10; x++) {
                                                 if (maxNum < output_data[0][x]) {
                                                     maxNum = output_data[0][x];
                                                     maxLoc = x;
@@ -270,7 +270,7 @@ public class holistic_activity extends AppCompatActivity {
                                                         answerFrame.setText(motion[maxLoc]);
                                                     }
                                                 } else {//분석값이 낮아서 무슨 동작인지 인식이 되지 않을 때
-//                                                answerFrame.setText("  ");
+                                                answerFrame.setText("  ");
                                             }
                                         }
 
