@@ -13,7 +13,7 @@ public class RetrofitClient {
                 .build();
         retrofit = new Retrofit.Builder()
 //                ⚠[주의!] 자신의 ip 주소로 변경할 것!
-                .baseUrl("http://127.0.0.1:5000") //Make sure to include your local machine or server ip/url
+                .baseUrl("http://ec2-15-165-160-135.ap-northeast-2.compute.amazonaws.com:5000/") //Make sure to include your local machine or server ip/url
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build();

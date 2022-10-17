@@ -29,11 +29,8 @@ public class LoginActivity extends AppCompatActivity{
     //백엔드 연동
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
-    // 임의의 BASE_URL 추가해둔 상태. 추후 수정해야 함
-    //신나:public String BASE_URL = "http://192.168.199.1:3001";
-    //"http://192.168.219.121:3001"
-    //무지:private String BASE_URL = "http://192.168.0.5:3001";
-    public static String BASE_URL = "http://192.168.199.1:3001";
+    // AWS - back 연결
+    public static String BASE_URL = "http://ec2-3-35-0-99.ap-northeast-2.compute.amazonaws.com:3001";
 
     public static String getBASE_URL(){
         return BASE_URL;
@@ -73,9 +70,9 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 //로그인 핸들러 호출
-                //handleLogin();
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
+                handleLogin();
+//                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+//                startActivity(intent);
             }
         });
         //비밀번호 찾기
