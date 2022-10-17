@@ -38,16 +38,18 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
     private int p_userId = MainActivity.p_userID;
     private String stringp_userId = String.valueOf(p_userId);
     private String selectedWord;
+    private Context context;
 
     public Yolo_Adapter(Context context, List<Yolo_data> yolo_data){
         this.inflater = LayoutInflater.from(context);
         this.yolo_data=yolo_data;
     }
 
-
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context=parent.getContext();
+        this.context=parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_yolo, parent, false);
         return new ItemViewHolder(view);
     }
@@ -186,13 +188,13 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
         call1.enqueue(new Callback<JsonElement>() {
             @Override
             public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-//                if (response.code() == 200) {
-//                    Toast.makeText(v.getContext(),"단어장에 추가되었습니다",Toast.LENGTH_SHORT);
-//                    Log.e("('a' ", "추가 성공!");
-//                } else {
-//                    Toast.makeText(v.getContext(), "이미 추가된 단어입니다.", Toast.LENGTH_SHORT).show();
-//                    Log.e("(._. ", "추가 실패!");
-//                }
+                if (response.code() == 200) {
+                    Toast.makeText(context,"단어장에 추가되었습니다",Toast.LENGTH_SHORT).show();
+                    Log.e("('a' ", "추가 성공!");
+                } else {
+                    Toast.makeText(context, "이미 추가된 단어입니다.", Toast.LENGTH_SHORT).show();
+                    Log.e("(._. ", "추가 실패!");
+                }
             }
 
             @Override
