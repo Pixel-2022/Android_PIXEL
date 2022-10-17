@@ -4,21 +4,27 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,16 +46,21 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
     private String selectedWord;
     private Context context;
 
+    //단어사전
+    ArrayList<Dict> dataList1=new ArrayList();
+    String url;
+
     public Yolo_Adapter(Context context, List<Yolo_data> yolo_data){
         this.inflater = LayoutInflater.from(context);
         this.yolo_data=yolo_data;
     }
 
+
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context=parent.getContext();
-        this.context=parent.getContext();
+        this.context= parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_yolo, parent, false);
         return new ItemViewHolder(view);
     }
@@ -116,11 +127,12 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
                 call1.enqueue(new Callback<JsonElement>() {
                     @Override
                     public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                        JsonArray DictResponseArray = response.body().getAsJsonArray();
+                        JsonObject DictResponseArray = response.body().getAsJsonObject();
                         if (response.code() == 201) {
                             Log.e("햄이네 박사 : ", "단어가 DB에 있다네");
-//                            DB에 단어가 있으면,
-//                            해당 단어의 영상을 보여줄 겁니다.
+                            String vv=DictResponseArray.get("videoURL").getAsString();
+                            Log.e("비디오 제대로 가져왔냐?",vv);
+                            videoDialog(vv);
                             Log.e("햄이네",DictResponseArray.getAsJsonObject().get("videoURL").getAsString());
                         } else {
                             Toast.makeText(v.getContext(), "DB에 없는 단어입니다. 추후 업데이트 될 예정입니다.", Toast.LENGTH_SHORT).show();
@@ -135,6 +147,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
                 });
             }
         });
+
 //       물체 수어 단어를 단어 카드에 저장
         Button saveBtn = dialogView.findViewById(R.id.saveBtn);
         saveBtn.setOnClickListener(new View.OnClickListener(){
@@ -173,6 +186,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
             }
         });
     }
+
     public void wordAdd(){
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -188,18 +202,53 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
         call1.enqueue(new Callback<JsonElement>() {
             @Override
             public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                if (response.code() == 200) {
-                    Toast.makeText(context,"단어장에 추가되었습니다",Toast.LENGTH_SHORT).show();
-                    Log.e("('a' ", "추가 성공!");
-                } else {
-                    Toast.makeText(context, "이미 추가된 단어입니다.", Toast.LENGTH_SHORT).show();
-                    Log.e("(._. ", "추가 실패!");
-                }
+//                if (response.code() == 200) {
+//                    Toast.makeText(v.getContext(),"단어장에 추가되었습니다",Toast.LENGTH_SHORT);
+//                    Log.e("('a' ", "추가 성공!");
+//                } else {
+//                    Toast.makeText(v.getContext(), "이미 추가된 단어입니다.", Toast.LENGTH_SHORT).show();
+//                    Log.e("(._. ", "추가 실패!");
+//                }
             }
 
             @Override
             public void onFailure(Call<JsonElement> call, Throwable t) {
                 Log.e("('-' 여기는 딕트 (", "연결 실패!");
+            }
+        });
+    }
+
+
+    public void videoDialog(String geturl){
+        VideoView vv;
+        View dialogView = inflater.inflate(R.layout.dialog_video, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(dialogView);
+
+        vv = dialogView.findViewById(R.id.videoV);
+
+        Uri videoUri = Uri.parse(geturl);
+        vv.setMediaController(new MediaController(context));
+        vv.setVideoURI(videoUri);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                //비디오 시작
+                vv.start();
+            }
+        });
+
+        TextView ok_btn = dialogView.findViewById(R.id.ok_btn);
+        ok_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
             }
         });
     }
