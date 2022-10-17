@@ -46,10 +46,6 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
     private String selectedWord;
     private Context context;
 
-    //단어사전
-    ArrayList<Dict> dataList1=new ArrayList();
-    String url;
-
     public Yolo_Adapter(Context context, List<Yolo_data> yolo_data){
         this.inflater = LayoutInflater.from(context);
         this.yolo_data=yolo_data;

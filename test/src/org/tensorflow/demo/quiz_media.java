@@ -97,6 +97,8 @@ public class quiz_media extends AppCompatActivity {
         name=intent.getStringExtra("단어이름");
         video=intent.getStringExtra("단어영상");
 
+        //Log.e("제대로 왔냐?", name);
+
         HashMap<String, float[][]> LandmarkMap = new HashMap<>();
         LandmarkMap.put("pose",null);
         LandmarkMap.put("leftHand",null);
