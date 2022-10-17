@@ -135,6 +135,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
                             Log.e("햄이네 박사 : ", "그런 단어는 없다네");
                         }
                     }
+
                     @Override
                     public void onFailure(Call<JsonElement> call, Throwable t) {
                         Log.e("('-' 여기는 욜로어댑터! (", "연결 실패!");
@@ -172,6 +173,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
                 });
             }
         });
+        
         TextView out_btn = dialogView.findViewById(R.id.out_btn);
         out_btn.setOnClickListener(new View.OnClickListener(){
             @Override

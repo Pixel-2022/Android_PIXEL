@@ -28,11 +28,14 @@
                 android:paddingLeft="10dp"
                 android:src="@drawable/film" />
             <android.widget.Button
+                android:backgroundTint="#F5FAFA"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="수화 영상 보기"
                 android:textColor="#5D5D79"
-                android:textSize="15dp" />
+                android:textSize="15dp"
+                android:clickable="false"
+                android:stateListAnimator="@null"/>
         </LinearLayout>
         <android.widget.Button
             android:id="@+id/saveBtn"
