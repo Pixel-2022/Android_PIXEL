@@ -74,6 +74,7 @@ public class quiz_media extends AppCompatActivity {
     float[][][] input_data = new float[1][30][524];
     float[][] output_data = new float[1][3];
     int l = 0;
+    private int flag = 0;
     Queue<Float> queue = new LinkedList<>();
     Queue<Integer> answerQueue = new LinkedList<>();
 
@@ -143,7 +144,7 @@ public class quiz_media extends AppCompatActivity {
         processor
                 .addPacketCallback("face_landmarks", (packet) -> {
                     final String[] nowAnswer = {""};
-                    if(nowAnswer[0] !=name){
+
                         try {
                             byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                             LandmarkProto.NormalizedLandmarkList poseLandmarks = LandmarkProto.NormalizedLandmarkList.parseFrom(landmarksRaw);
@@ -152,6 +153,9 @@ public class quiz_media extends AppCompatActivity {
                             if(LandmarkMap.get("leftHand")==null && LandmarkMap.get("rightHand")==null){
 //                            answerFrame.setText("손이 보이지 않아서 인식이 되지 않아요");
                             }else {
+                                Log.e("햄이네 전언 flag값 : ", String.valueOf(flag));
+                                Log.e("햄이네 전언 : name 값:",name);
+                                if(flag==0){
                                 Call<JsonElement> callAPI = retrofitClient.getApi().sendLandmark(LandmarkMap);
                                 Log.e("입력된 값", String.valueOf(LandmarkMap));
 
@@ -220,6 +224,10 @@ public class quiz_media extends AppCompatActivity {
                                                     if (maxLoc != -1) {
                                                         Log.e("번역 : ", motion[maxLoc]);
                                                         nowAnswer[0] =motion[maxLoc];
+                                                        Log.e("햄이네 박사의 번역 결과:",nowAnswer[0]);
+                                                        if(nowAnswer[0].equals(name)){
+                                                            flag=1;
+                                                        }
 //                                                    answerFrame.setText(motion[maxLoc]);
                                                     }
                                                 } else {//분석값이 낮아서 무슨 동작인지 인식이 되지 않을 때
@@ -237,13 +245,14 @@ public class quiz_media extends AppCompatActivity {
                                         Log.e("실패군", "실패다");
                                     }
                                 });
+                                }
+                                else{dialog1();}
                             }
                         } catch (InvalidProtocolBufferException e) {
                             Log.e("AAA", "Failed to get proto.", e);
                         }
 
-                    }
-                    else{dialog1();}
+
                 });
         processor
                 .addPacketCallback("pose_landmarks", (packet) -> {
