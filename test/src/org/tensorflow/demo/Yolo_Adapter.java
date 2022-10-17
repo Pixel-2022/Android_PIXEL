@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +59,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context=parent.getContext();
+        context=parent.getContext();
         this.context= parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_yolo, parent, false);
         return new ItemViewHolder(view);
@@ -126,20 +127,18 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
                 call1.enqueue(new Callback<JsonElement>() {
                     @Override
                     public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                        JsonArray DictResponseArray = response.body().getAsJsonArray();
+                        JsonObject DictResponseArray = response.body().getAsJsonObject();
                         if (response.code() == 201) {
                             Log.e("햄이네 박사 : ", "단어가 DB에 있다네");
-//                            DB에 단어가 있으면,
-//                            해당 단어의 영상을 보여줄 겁니다.
-                            url=wordVideo();
-                            videoDialog(url);
+                            String vv=DictResponseArray.get("videoURL").getAsString();
+                            Log.e("비디오 제대로 가져왔냐?",vv);
+                            videoDialog(vv);
                             Log.e("햄이네",DictResponseArray.getAsJsonObject().get("videoURL").getAsString());
                         } else {
                             Toast.makeText(v.getContext(), "DB에 없는 단어입니다. 추후 업데이트 될 예정입니다.", Toast.LENGTH_SHORT).show();
                             Log.e("햄이네 박사 : ", "그런 단어는 없다네");
                         }
                     }
-
                     @Override
                     public void onFailure(Call<JsonElement> call, Throwable t) {
                         Log.e("('-' 여기는 욜로어댑터! (", "연결 실패!");
@@ -147,6 +146,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
                 });
             }
         });
+
 //       물체 수어 단어를 단어 카드에 저장
         Button saveBtn = dialogView.findViewById(R.id.saveBtn);
         saveBtn.setOnClickListener(new View.OnClickListener(){
@@ -176,7 +176,6 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
                 });
             }
         });
-        
         TextView out_btn = dialogView.findViewById(R.id.out_btn);
         out_btn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -217,37 +216,6 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
         });
     }
 
-    public String wordVideo(){
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        retrofitInterface = retrofit.create(RetrofitInterface.class);
-
-        Call<JsonElement> call2 = retrofitInterface.getDictAll();
-        call2.enqueue(new Callback<JsonElement>() {
-            @Override
-            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                JsonArray DictResponseArray = response.body().getAsJsonArray();
-
-                for (int i=0; i<DictResponseArray.size();i++){
-                    JsonElement jsonElement = DictResponseArray.get(i);
-                    String name = jsonElement.getAsJsonObject().get("Word").getAsString();
-                    String videoURL = jsonElement.getAsJsonObject().get("videoURL").getAsString();
-                    String wordImg = jsonElement.getAsJsonObject().get("wordImg").getAsString();
-                    if(name==selectedWord){
-                        dataList1.add(new Dict(name, wordImg, videoURL));
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<JsonElement> call, Throwable t) {
-                Log.e("여기는 욜로 어댑터","영상 실패");
-            }
-        });
-        return dataList1.get(0).getVideoURL();
-    }
 
     public void videoDialog(String geturl){
         VideoView vv;
