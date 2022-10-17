@@ -321,7 +321,7 @@ public class MultiBoxTracker {
           break;
         case "keyboard": resultToKorean = "키보드";
           break;
-        case "cell phone": resultToKorean = "핸드폰";
+        case "cell phone": resultToKorean = "휴대폰";
           break;
         case "microwave" : resultToKorean = "전자레인지";
           break;
