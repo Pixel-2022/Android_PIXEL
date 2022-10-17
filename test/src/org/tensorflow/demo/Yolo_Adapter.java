@@ -4,14 +4,18 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,6 +43,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
     private int p_userId = MainActivity.p_userID;
     private String stringp_userId = String.valueOf(p_userId);
     private String selectedWord;
+    private Context context;
 
     //단어사전
     ArrayList<Dict> dataList1=new ArrayList();
@@ -53,6 +58,8 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Context context=parent.getContext();
+        this.context= parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_yolo, parent, false);
         return new ItemViewHolder(view);
     }
@@ -125,6 +132,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
 //                            DB에 단어가 있으면,
 //                            해당 단어의 영상을 보여줄 겁니다.
                             url=wordVideo();
+                            videoDialog(url);
                             Log.e("햄이네",DictResponseArray.getAsJsonObject().get("videoURL").getAsString());
                         } else {
                             Toast.makeText(v.getContext(), "DB에 없는 단어입니다. 추후 업데이트 될 예정입니다.", Toast.LENGTH_SHORT).show();
@@ -239,5 +247,39 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
             }
         });
         return dataList1.get(0).getVideoURL();
+    }
+
+    public void videoDialog(String geturl){
+        VideoView vv;
+        View dialogView = inflater.inflate(R.layout.dialog_video, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(dialogView);
+
+        vv = dialogView.findViewById(R.id.videoV);
+
+        Uri videoUri = Uri.parse(geturl);
+        vv.setMediaController(new MediaController(context));
+        vv.setVideoURI(videoUri);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                //비디오 시작
+                vv.start();
+            }
+        });
+
+        TextView ok_btn = dialogView.findViewById(R.id.ok_btn);
+        ok_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
     }
 }
