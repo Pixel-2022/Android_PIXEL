@@ -86,7 +86,7 @@ public class quiz_media extends AppCompatActivity {
 //            "어디","어제","언제","얼굴","여동생","오전","오토바이","오후","좋다","지금",
 //            "책","컵","휴대폰"};
 //    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다","먹다"};
-    String[] motion = {"가족","감사","괜찮아"};
+    String[] motion = {"가족","감사합니다","괜찮습니다"};
 
 
     @Override
@@ -246,7 +246,9 @@ public class quiz_media extends AppCompatActivity {
                                     }
                                 });
                                 }
-                                else{dialog1();}
+                                else{
+                                    onPause();
+                                    dialog1();}
                             }
                         } catch (InvalidProtocolBufferException e) {
                             Log.e("AAA", "Failed to get proto.", e);
