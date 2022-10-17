@@ -106,8 +106,9 @@ public class holistic_activity extends AppCompatActivity {
 //            "먹다","미안","비빔밥","사람","시다","쓰다","아깝다","안경","안녕","앉다",
 //            "어디","어제","언제","얼굴","여동생","오전","오토바이","오후","좋다","지금",
 //            "책","컵","휴대폰"};
-    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다"};
+//    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다"};
 //    String[] motion = {"가족","감사","괜찮아"};
+    String[] motion18 = {"감사합니다","괜찮습니다","귀엽다","쓰다","안경","오전","오토바이","오후","책","컵"};
 
 
     @Override
@@ -221,7 +222,7 @@ public class holistic_activity extends AppCompatActivity {
                                                 }
                                             }
                                             // 2. 30개가 되면 모델에게 보내기
-                                            Interpreter lite = getTfliteInterpreter("AAAA17.tflite");
+                                            Interpreter lite = getTfliteInterpreter("AAAA18.tflite");
                                             lite.run(input_data, output_data);
                                             // 3. 모델에서 계산된 분석값을 이용해 올바른 번역 결과 보여주기
                                             // 3-(1). 모델에서 계산된 단어 별 분석값을 로그에 출력
@@ -266,8 +267,8 @@ public class holistic_activity extends AppCompatActivity {
 //                                            }
                                                     // 3-(4). 올바른 번역값 출력하기
                                                     if (maxLoc != -1) {
-                                                        Log.e("번역 : ", motion[maxLoc]);
-                                                        answerFrame.setText(motion[maxLoc]);
+                                                        Log.e("번역 : ", motion18[maxLoc]);
+                                                        answerFrame.setText(motion18[maxLoc]);
                                                     }
                                                 } else {//분석값이 낮아서 무슨 동작인지 인식이 되지 않을 때
                                                 answerFrame.setText("  ");
