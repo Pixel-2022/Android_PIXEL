@@ -121,7 +121,8 @@ public class quiz_media extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                finish();
+                Intent actintent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(actintent);
             }
         });
         try {
