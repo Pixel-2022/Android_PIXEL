@@ -103,7 +103,8 @@ public class QuizActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                finish();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
             }
         });
         try {
