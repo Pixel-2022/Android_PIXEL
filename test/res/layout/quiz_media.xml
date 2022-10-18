@@ -11,7 +11,6 @@
         android:text="돌아가기"
         android:backgroundTint="@color/black"
         />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,6 +20,16 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:text="동작인식결과">
+    </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="맞았습니다!"
+        android:layout_gravity="center"
+        android:textColor="#EA6E6E"
+        android:textSize="20dp"
+        android:visibility="gone">
     </TextView>
 
     <FrameLayout
