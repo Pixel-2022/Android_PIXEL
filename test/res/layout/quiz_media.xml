@@ -11,8 +11,8 @@
         android:text="돌아가기"
         android:backgroundTint="@color/black"
         />
+
     <TextView
-        android:id="@+id/actResult"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -21,16 +21,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:text="동작인식결과">
-    </TextView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="맞았습니다!"
-        android:layout_gravity="center"
-        android:textColor="#EA6E6E"
-        android:textSize="20dp"
-        android:visibility="gone">
     </TextView>
 
     <FrameLayout
@@ -47,22 +37,51 @@
             android:text="no_camera_access" />
     </FrameLayout>
     <LinearLayout
+        android:layout_gravity="center"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         >
-        <Button
+        <LinearLayout
+            android:layout_margin="10dp"
             android:id="@+id/cor_show_video"
-            android:layout_width="wrap_content"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:text="정답입니다!"
-            android:textColor="#000000"
-            />
-        <Button
+            android:layout_gravity="center"
+            android:background="@drawable/card_round"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:src="@drawable/film" />
+
+            <android.widget.Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="수화 보기"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:clickable="false"
+                android:stateListAnimator="@null"/>
+        </LinearLayout>
+
+        <android.widget.Button
+            android:layout_margin="10dp"
             android:id="@+id/nextQuiz"
-            android:layout_width="wrap_content"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="다음 문제"
-            android:textColor="#000000"/>
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:background="@drawable/round_click"/>
     </LinearLayout>
 
 
