@@ -11,7 +11,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,8 +20,6 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.JsonArray;
@@ -36,6 +33,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static org.tensorflow.demo.MainActivity.p_email;
+import static org.tensorflow.demo.MainActivity.p_name;
+import static org.tensorflow.demo.MainActivity.p_password;
+import static org.tensorflow.demo.MainActivity.p_userID;
+
+
 
 public class QuizActivity extends AppCompatActivity {
     private Retrofit retrofit;
@@ -52,7 +56,6 @@ public class QuizActivity extends AppCompatActivity {
     String[] videoURLs;
     int rannum;
     private String BASE_URL=LoginActivity.getBASE_URL();
-
 
 
     // ApplicationInfo for retrieving metadata defined in the manifest.
@@ -103,7 +106,16 @@ public class QuizActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent= new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Bundle bundle = new Bundle();
+
+
+                bundle.putString("email",p_email);
+                bundle.putString("password", p_password);
+                bundle.putString("name",p_name);
+                bundle.putInt("UserID",p_userID);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
