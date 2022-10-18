@@ -46,6 +46,14 @@
             android:gravity="center"
             android:text="no_camera_access" />
     </FrameLayout>
+    <VideoView
+        android:id="@+id/videoV"
+        android:layout_width="300dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:id="@+id/showButtons"
         android:layout_gravity="center"

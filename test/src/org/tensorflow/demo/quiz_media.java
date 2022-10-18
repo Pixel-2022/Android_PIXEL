@@ -17,8 +17,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -116,6 +118,8 @@ public class quiz_media extends AppCompatActivity {
         LinearLayout cor_show_video = findViewById(R.id.cor_show_video);
         Button nextQuiz = findViewById(R.id.nextQuiz);
         LinearLayout showButtons = findViewById(R.id.showButtons);
+        FrameLayout preview_display_layout2 = findViewById(R.id.preview_display_layout2);
+        VideoView videoV = findViewById(R.id.videoV);
 
         backBtn = findViewById(R.id.BackBtn);
         backBtn.setOnClickListener(new View.OnClickListener(){
@@ -237,6 +241,8 @@ public class quiz_media extends AppCompatActivity {
                                                             showButtons.setVisibility(View.VISIBLE);
                                                             //B. 글씨도 보여주기
                                                             actResult.setVisibility(View.VISIBLE);
+
+
                                                         }
 //                                                    answerFrame.setText(motion[maxLoc]);
                                                     }
@@ -317,6 +323,15 @@ public class quiz_media extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
                 startActivity(intent);
+            }
+        });
+        cor_show_video.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //C. 카메라 안 보여주기
+                preview_display_layout2.setVisibility(View.GONE);
+                //D. 동영상 보여주기
+                videoV.setVisibility(View.VISIBLE);
             }
         });
     }
