@@ -23,6 +23,7 @@
     </TextView>
 
     <TextView
+        android:id="@+id/actResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="맞았습니다!"
@@ -46,6 +47,7 @@
             android:text="no_camera_access" />
     </FrameLayout>
     <LinearLayout
+        android:id="@+id/showButtons"
         android:layout_gravity="center"
         android:orientation="horizontal"
         android:layout_width="match_parent"

@@ -17,6 +17,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -111,6 +112,11 @@ public class quiz_media extends AppCompatActivity {
 
         TextView answerFrame;
 
+        TextView actResult = findViewById(R.id.actResult);
+        LinearLayout cor_show_video = findViewById(R.id.cor_show_video);
+        Button nextQuiz = findViewById(R.id.nextQuiz);
+        LinearLayout showButtons = findViewById(R.id.showButtons);
+
         backBtn = findViewById(R.id.BackBtn);
         backBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -155,7 +161,7 @@ public class quiz_media extends AppCompatActivity {
                             }else {
                                 Log.e("햄이네 전언 flag값 : ", String.valueOf(flag));
                                 Log.e("햄이네 전언 : name 값:",name);
-                                if(flag==0){
+
                                 Call<JsonElement> callAPI = retrofitClient.getApi().sendLandmark(LandmarkMap);
                                 Log.e("입력된 값", String.valueOf(LandmarkMap));
 
@@ -227,6 +233,10 @@ public class quiz_media extends AppCompatActivity {
                                                         Log.e("햄이네 박사의 번역 결과:",nowAnswer[0]);
                                                         if(nowAnswer[0].equals(name)){
                                                             flag=1;
+                                                            //A. 숨겨져있던 버튼들 보여주기
+                                                            showButtons.setVisibility(View.VISIBLE);
+                                                            //B. 글씨도 보여주기
+                                                            actResult.setVisibility(View.VISIBLE);
                                                         }
 //                                                    answerFrame.setText(motion[maxLoc]);
                                                     }
@@ -246,10 +256,8 @@ public class quiz_media extends AppCompatActivity {
                                     }
                                 });
                                 }
-                                else{
-                                    onPause();
-                                    dialog1();}
-                            }
+
+
                         } catch (InvalidProtocolBufferException e) {
                             Log.e("AAA", "Failed to get proto.", e);
                         }
