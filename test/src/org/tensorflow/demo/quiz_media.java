@@ -311,6 +311,14 @@ public class quiz_media extends AppCompatActivity {
 
         PermissionHelper.checkAndRequestCameraPermissions(this);
 
+        //다음문제 버튼
+        nextQuiz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     // 좌표값 숫자 배열로 변환해서 반환하는 코드
