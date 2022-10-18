@@ -12,6 +12,7 @@
         android:backgroundTint="@color/black"
         />
     <TextView
+        android:id="@+id/actResult"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -45,5 +46,24 @@
             android:gravity="center"
             android:text="no_camera_access" />
     </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <Button
+            android:id="@+id/cor_show_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="정답입니다!"
+            android:textColor="#000000"
+            />
+        <Button
+            android:id="@+id/nextQuiz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="다음 문제"
+            android:textColor="#000000"/>
+    </LinearLayout>
+
 
 </LinearLayout>
