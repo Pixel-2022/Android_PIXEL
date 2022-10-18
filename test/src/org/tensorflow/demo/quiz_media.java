@@ -9,6 +9,8 @@ import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
@@ -19,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -332,6 +335,17 @@ public class quiz_media extends AppCompatActivity {
                 preview_display_layout2.setVisibility(View.GONE);
                 //D. 동영상 보여주기
                 videoV.setVisibility(View.VISIBLE);
+                videoV.setMediaController(new MediaController(quiz_media.this));
+                Uri videoUri = Uri.parse(video);
+                videoV.setVideoURI(videoUri);
+
+                videoV.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mediaPlayer) {
+                        //비디오 시작
+                        videoV.start();
+                    }
+                });
             }
         });
     }
@@ -466,23 +480,4 @@ public class quiz_media extends AppCompatActivity {
         return fileChannel.map(FileChannel.MapMode.READ_ONLY,startOffset,declaredLength);
     }
 
-    public void dialog1(){
-        View dialogView=getLayoutInflater().inflate(R.layout.dialog_correct,null);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(quiz_media.this);
-        builder.setView(dialogView);
-
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        TextView ok_btn = dialogView.findViewById(R.id.ok_btn1);
-        ok_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-                finish();
-            }
-        });
-    }
 }
