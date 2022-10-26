@@ -3,6 +3,8 @@ package org.tensorflow.demo;
 
 import com.google.gson.JsonElement;
 
+import org.json.JSONArray;
+
 import java.util.HashMap;
 
 import retrofit2.Call;
@@ -37,7 +39,7 @@ public interface RetrofitInterface {
     Call<JsonElement> delList(@Body HashMap<String, String> map);
 
     @POST("/user/findPW")
-    Call<CheckResult> findpw(@Body HashMap<String, String> map);
+    Call<JsonElement> findpw(@Body HashMap<String, String> map);
 
 
     //    API한테서 값 받아오기

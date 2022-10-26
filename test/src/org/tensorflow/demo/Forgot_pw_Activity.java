@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.JsonElement;
+
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -34,7 +36,7 @@ public class Forgot_pw_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.forgot);
 
-        edit.findViewById(R.id.input_pwd);
+        edit=findViewById(R.id.input_pwd);
         edit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -52,16 +54,16 @@ public class Forgot_pw_Activity extends AppCompatActivity {
             }
         });
 
-        button.findViewById(R.id.forgotPwdBtn);
+        button=findViewById(R.id.forgotPwdBtn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("email",saveemail);
-                Call<org.tensorflow.demo.CheckResult> call=retrofitInterface.findpw(map);
-                call.enqueue(new Callback<org.tensorflow.demo.CheckResult>() {
+                Call<JsonElement> call=retrofitInterface.findpw(map);
+                call.enqueue(new Callback<JsonElement>() {
                     @Override
-                    public void onResponse(Call<org.tensorflow.demo.CheckResult> call, Response<org.tensorflow.demo.CheckResult> response) {
+                    public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
                         if (response.code() == 200) {
                             Toast.makeText(Forgot_pw_Activity.this, "이메일로 비밀번호가 발송되었습니다.", Toast.LENGTH_LONG).show();
                             //final org.tensorflow.demo.CheckResult result = response.body();
@@ -71,14 +73,12 @@ public class Forgot_pw_Activity extends AppCompatActivity {
                         }
                     }
                     @Override
-                    public void onFailure(Call<org.tensorflow.demo.CheckResult> call, Throwable t) {
+                    public void onFailure(Call<JsonElement> call, Throwable t) {
                         Toast.makeText(Forgot_pw_Activity.this, t.getMessage(),
                                 Toast.LENGTH_LONG).show();
                     }
-
                 });
             }
         });
-
     }
 }
