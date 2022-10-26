@@ -185,8 +185,8 @@ public class holistic_activity extends AppCompatActivity {
                     previewDisplayLayout.setVisibility(View.VISIBLE);
 //                5. listFlag값 0으로 변경(닫힘 상태)
                     listFlag=0;
-//                    dataList.clear();
-//                    recogList.clear();
+                    dataList.clear();
+                    recogList.clear();
                 }
             }
         });
@@ -334,13 +334,8 @@ public class holistic_activity extends AppCompatActivity {
                                                             dataList.add(motion18[maxLoc]);
                                                             recogList.add(new Holistic_data(motion18[maxLoc]));
                                                             recogWordRecyclerView.setAdapter(adapter);
-//                                                            Log.e("햄이네박사님","단어를 추가했습니다.");
-//                                                            Log.e("햄이네박사님","수고했다네~");
                                                         }
-//                                                        Log.e("햄이네박사님", String.valueOf(recogList.size()));
-//                                                        for(int i=0; i<recogList.size();i++){
-//                                                            Log.e("햄이네박사님 recogList입니다->", String.valueOf(recogList.get(i).getTitle()));
-//                                                        }
+
                                                     }
                                                 } else {//분석값이 낮아서 무슨 동작인지 인식이 되지 않을 때
                                                 answerFrame.setText("  ");

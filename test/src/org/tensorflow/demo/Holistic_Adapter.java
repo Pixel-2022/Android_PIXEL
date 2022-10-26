@@ -7,13 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.JsonElement;
+
+import java.util.HashMap;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Holistic_Adapter extends RecyclerView.Adapter<Holistic_Adapter.ItemViewHolder> {
     private LayoutInflater inflater;
@@ -30,10 +38,7 @@ public class Holistic_Adapter extends RecyclerView.Adapter<Holistic_Adapter.Item
     public Holistic_Adapter(Context context, List<Holistic_data> holistic_data){
         this.inflater = LayoutInflater.from(context);
         this.holistic_data = holistic_data;
-//        Log.e("햄이네박사님", String.valueOf(holistic_data.size()));
-//        for(int i=0; i<holistic_data.size();i++){
-//            Log.e("햄이네박사님 holistic_data입니다->", String.valueOf(holistic_data.get(i).getTitle()));
-//        }
+
     }
 
     @NonNull
@@ -72,8 +77,36 @@ public class Holistic_Adapter extends RecyclerView.Adapter<Holistic_Adapter.Item
                 @Override
                 public void onClick(View view) {
                     Log.e("선택되었어",String.valueOf(Holistic_title.getText()));
-
                     selectedWord= String.valueOf(Holistic_title.getText());
+
+                    retrofit = new Retrofit.Builder()
+                            .baseUrl(BASE_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    retrofitInterface = retrofit.create(RetrofitInterface.class);
+
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("UserId", stringp_userId);
+                    map.put("Word", selectedWord);
+
+                    Call<JsonElement> call1 = retrofitInterface.addList(map);
+                    call1.enqueue(new Callback<JsonElement>() {
+                        @Override
+                        public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                            if (response.code() == 200) {
+                                Toast.makeText(context,"단어장에 추가되었습니다",Toast.LENGTH_SHORT).show();
+                                Log.e("('a' ", "추가 성공!");
+                            } else {
+                                Toast.makeText(context, "이미 추가된 단어입니다.", Toast.LENGTH_SHORT).show();
+                                Log.e("(._. ", "추가 실패!");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonElement> call, Throwable t) {
+                            Log.e("('-' 여기는 딕트 (", "연결 실패!");
+                        }
+                    });
                 }
             });
         }
