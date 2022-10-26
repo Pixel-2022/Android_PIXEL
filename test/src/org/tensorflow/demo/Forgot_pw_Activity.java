@@ -69,10 +69,10 @@ public class Forgot_pw_Activity extends AppCompatActivity {
                 HashMap<String, String> map = new HashMap<>();
                 Log.e("이메일 뽑아는 오냐?", saveemail);
                 map.put("email",saveemail);
-                Call<JsonElement> call=retrofitInterface.findpw(map);
-                call.enqueue(new Callback<JsonElement>() {
+                Call<Void> call=retrofitInterface.findpw(map);
+                call.enqueue(new Callback<Void>() {
                     @Override
-                    public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                    public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.code() == 200) {
                             Toast.makeText(Forgot_pw_Activity.this, "이메일로 비밀번호가 발송되었습니다.", Toast.LENGTH_LONG).show();
                             //final org.tensorflow.demo.CheckResult result = response.body();
@@ -82,7 +82,7 @@ public class Forgot_pw_Activity extends AppCompatActivity {
                         }
                     }
                     @Override
-                    public void onFailure(Call<JsonElement> call, Throwable t) {
+                    public void onFailure(Call<Void> call, Throwable t) {
                         Toast.makeText(Forgot_pw_Activity.this, t.getMessage(),
                                 Toast.LENGTH_LONG).show();
                     }

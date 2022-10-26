@@ -39,7 +39,7 @@ public interface RetrofitInterface {
     Call<JsonElement> delList(@Body HashMap<String, String> map);
 
     @POST("/user/findPW")
-    Call<JsonElement> findpw(@Body HashMap<String, String> map);
+    Call<Void> findpw(@Body HashMap<String, String> map);
 
 
     //    API한테서 값 받아오기
