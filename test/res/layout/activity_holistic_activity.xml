@@ -42,8 +42,19 @@
             android:layout_height="400dp"
             android:layout_margin="10dp"
             android:layout_weight="5"
-            android:visibility="gone">
-
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="인식된 단어 목록"
+                android:textSize="40dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="※단어 목록 닫기 버튼을 누르면 목록이 초기화됩니다."/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recogWordList_recyclerView"
                 android:layout_width="match_parent"
