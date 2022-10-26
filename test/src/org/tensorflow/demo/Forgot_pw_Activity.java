@@ -3,6 +3,7 @@ package org.tensorflow.demo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +29,7 @@ public class Forgot_pw_Activity extends AppCompatActivity {
     private EditText edit;
     private String saveemail;
 
+    public static String BASE_URL = "http://ec2-3-36-61-222.ap-northeast-2.compute.amazonaws.com:3001";
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
 
@@ -54,11 +56,18 @@ public class Forgot_pw_Activity extends AppCompatActivity {
             }
         });
 
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        retrofitInterface = retrofit.create(RetrofitInterface.class);
+
         button=findViewById(R.id.forgotPwdBtn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 HashMap<String, String> map = new HashMap<>();
+                Log.e("이메일 뽑아는 오냐?", saveemail);
                 map.put("email",saveemail);
                 Call<JsonElement> call=retrofitInterface.findpw(map);
                 call.enqueue(new Callback<JsonElement>() {
