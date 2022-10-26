@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity{
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
     // AWS - back 연결
-    public static String BASE_URL = "http://ec2-3-35-0-99.ap-northeast-2.compute.amazonaws.com:3001";
+    public static String BASE_URL = "http://ec2-3-36-61-222.ap-northeast-2.compute.amazonaws.com:3001";
 
     public static String getBASE_URL(){
         return BASE_URL;
