@@ -36,6 +36,10 @@ public interface RetrofitInterface {
     @POST("/wordList/listDel")
     Call<JsonElement> delList(@Body HashMap<String, String> map);
 
+    @POST("/user/findPW")
+    Call<CheckResult> findpw(@Body HashMap<String, String> map);
+
+
     //    API한테서 값 받아오기
     @GET("/muzi")
     Call<JsonElement> getWhatEverMuzi();
