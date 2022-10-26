@@ -7,6 +7,8 @@ import android.content.res.AssetFileDescriptor;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.util.Size;
@@ -15,6 +17,8 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -110,6 +114,12 @@ public class holistic_activity extends AppCompatActivity {
 //    String[] motion = {"가족","감사","괜찮아"};
     String[] motion18 = {"감사합니다","괜찮습니다","귀엽다","쓰다","안경","오전","오토바이","오후","책","컵"};
 
+    int listFlag = 0;
+    //리사이클러뷰
+    Holistic_Adapter adapter;
+    private RecyclerView.LayoutManager mLayoutmanager;
+    public static List<String> dataList = new ArrayList<>();
+    public static List<Holistic_data> recogList= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +136,17 @@ public class holistic_activity extends AppCompatActivity {
         retrofitClient.generateClient();
 
         TextView answerFrame = findViewById(R.id.answerFrame);
+        Button recogWordListBtn = findViewById(R.id.recogWordListBtn);
+        LinearLayout recogWordList = findViewById(R.id.recogWordList);
+        RecyclerView recogWordRecyclerView = findViewById(R.id.recogWordList_recyclerView);
+        FrameLayout previewDisplayLayout = findViewById(R.id.preview_display_layout);
 
+        mLayoutmanager = new LinearLayoutManager(getApplication());
+        recogWordRecyclerView.setLayoutManager(mLayoutmanager);
+
+        adapter=new Holistic_Adapter(getApplication(),recogList);
+        recogWordRecyclerView.setAdapter(adapter);
+//돌아가기 버튼
         backBtn = findViewById(R.id.BackBtn);
         backBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -134,6 +154,45 @@ public class holistic_activity extends AppCompatActivity {
                 finish();
             }
         });
+//인식된 단어 목록 보기 버튼
+        recogWordListBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                if(listFlag==0){ //목록이 닫혀 있는 상태라면,
+                    adapter=new Holistic_Adapter(getApplication(),recogList);
+//                1. 인식된 단어 목록 버튼의 글씨가 "단어 목록 닫기"로 변경되기
+                    recogWordListBtn.setText("단어 목록 닫기");
+//                2. recyclerview visibility=visible
+                    recogWordList.setVisibility(View.VISIBLE);
+//                3. answerFrame visibility=gone
+                    answerFrame.setVisibility(View.GONE);
+//                4. preview_display_layout visibility=gone
+                    previewDisplayLayout.setVisibility(View.GONE);
+//                5. listFlag값 1로 변경(열림 상태)
+                    listFlag=1;
+//               어댑터 연결
+                    recogWordRecyclerView.setAdapter(adapter);
+
+
+                } else{ //목록이 열려 있는 상태라면,
+//                1. 인식된 단어 목록 버튼의 글씨가 "인식된 단어 목록"으로 변경되기
+                    recogWordListBtn.setText("인식된 단어 목록");
+//                2. recyclerview visibility=gone
+                    recogWordList.setVisibility(View.GONE);
+//                3. answerFrame visibility=visible
+                    answerFrame.setVisibility(View.VISIBLE);
+//                4. preview_display_layout visibility=visible
+                    previewDisplayLayout.setVisibility(View.VISIBLE);
+//                5. listFlag값 0으로 변경(닫힘 상태)
+                    listFlag=0;
+//                    dataList.clear();
+//                    recogList.clear();
+                }
+            }
+        });
+//단어 목록 recyclerview
+
+
         try {
             applicationInfo =
                     getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
@@ -269,6 +328,19 @@ public class holistic_activity extends AppCompatActivity {
                                                     if (maxLoc != -1) {
                                                         Log.e("번역 : ", motion18[maxLoc]);
                                                         answerFrame.setText(motion18[maxLoc]);
+
+                                                        //[단어 저장 기능]인식된 단어 배열에 저장하기
+                                                        if(dataList.contains(motion18[maxLoc])==false){
+                                                            dataList.add(motion18[maxLoc]);
+                                                            recogList.add(new Holistic_data(motion18[maxLoc]));
+                                                            recogWordRecyclerView.setAdapter(adapter);
+//                                                            Log.e("햄이네박사님","단어를 추가했습니다.");
+//                                                            Log.e("햄이네박사님","수고했다네~");
+                                                        }
+//                                                        Log.e("햄이네박사님", String.valueOf(recogList.size()));
+//                                                        for(int i=0; i<recogList.size();i++){
+//                                                            Log.e("햄이네박사님 recogList입니다->", String.valueOf(recogList.get(i).getTitle()));
+//                                                        }
                                                     }
                                                 } else {//분석값이 낮아서 무슨 동작인지 인식이 되지 않을 때
                                                 answerFrame.setText("  ");
