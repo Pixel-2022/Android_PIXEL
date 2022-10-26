@@ -12,12 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.JsonElement;
-
-import java.io.IOException;
 import java.util.HashMap;
 
-import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,7 +34,7 @@ public class Forgot_pw_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.forgot);
 
-        edit=findViewById(R.id.input_pwd);
+        edit = findViewById(R.id.input_pwd);
         edit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -52,7 +48,7 @@ public class Forgot_pw_Activity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                saveemail=edit.getText().toString();
+                saveemail = edit.getText().toString();
             }
         });
 
@@ -62,25 +58,23 @@ public class Forgot_pw_Activity extends AppCompatActivity {
                 .build();
         retrofitInterface = retrofit.create(RetrofitInterface.class);
 
-        button=findViewById(R.id.forgotPwdBtn);
+        button = findViewById(R.id.forgotPwdBtn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 HashMap<String, String> map = new HashMap<>();
-                Log.e("이메일 뽑아는 오냐?", saveemail);
-                map.put("email",saveemail);
-                Call<Void> call=retrofitInterface.findpw(map);
+                map.put("email", saveemail);
+                Call<Void> call = retrofitInterface.findpw(map);
                 call.enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.code() == 200) {
                             Toast.makeText(Forgot_pw_Activity.this, "이메일로 비밀번호가 발송되었습니다.", Toast.LENGTH_LONG).show();
-                            //final org.tensorflow.demo.CheckResult result = response.body();
-                        }
-                        else if(response.code() == 404){
+                        } else if (response.code() == 404) {
                             Toast.makeText(Forgot_pw_Activity.this, "404 오류", Toast.LENGTH_LONG).show();
                         }
                     }
+
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
                         Toast.makeText(Forgot_pw_Activity.this, t.getMessage(),

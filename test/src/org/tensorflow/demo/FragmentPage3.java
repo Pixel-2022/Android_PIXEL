@@ -28,14 +28,14 @@ public class FragmentPage3 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        v= inflater.inflate(R.layout.fragment3,container,false);
+        v = inflater.inflate(R.layout.fragment3, container, false);
 
-        ct=container.getContext();
-        Button logout=v.findViewById(R.id.setLogout);
-        TextView notice=v.findViewById(R.id.setNotice);
-        TextView ask=v.findViewById(R.id.setAsk);
-        TextView name=v.findViewById(R.id.setNick);
-        TextView id=v.findViewById(R.id.setId);
+        ct = container.getContext();
+        Button logout = v.findViewById(R.id.setLogout);
+        TextView notice = v.findViewById(R.id.setNotice);
+        TextView ask = v.findViewById(R.id.setAsk);
+        TextView name = v.findViewById(R.id.setNick);
+        TextView id = v.findViewById(R.id.setId);
 
         name.setText(p_name);
         id.setText(p_email);
@@ -51,19 +51,17 @@ public class FragmentPage3 extends Fragment {
                 p_email = "";
                 p_password = "";
 
-                Intent intent=new Intent(getActivity(),LoginActivity.class);
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
-//                Intent intent=new Intent(getActivity(),DetectorActivity.class);
-//                startActivity(intent);
             }
         });
 
         //공지사항 토스트
-        notice.setOnClickListener(new View.OnClickListener(){
+        notice.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                Toast.makeText(ct,"공지사항.", Toast.LENGTH_LONG).show();
+                Toast.makeText(ct, "공지사항.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -71,7 +69,7 @@ public class FragmentPage3 extends Fragment {
         ask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ct,"문의사항이 없습니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(ct, "문의사항이 없습니다.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -79,7 +77,7 @@ public class FragmentPage3 extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 }

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -70,6 +71,7 @@ public class holistic_activity extends AppCompatActivity {
     private static final boolean FLIP_FRAMES_VERTICALLY = false;
 
     private Button backBtn;
+
     static {
         // Load all native libraries needed by the app.
         System.loadLibrary("mediapipe_jni");
@@ -106,20 +108,20 @@ public class holistic_activity extends AppCompatActivity {
     Queue<Float> queue = new LinkedList<>();
     Queue<Integer> answerQueue = new LinkedList<>();
 
-//    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다",
+    //    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다",
 //            "먹다","미안","비빔밥","사람","시다","쓰다","아깝다","안경","안녕","앉다",
 //            "어디","어제","언제","얼굴","여동생","오전","오토바이","오후","좋다","지금",
 //            "책","컵","휴대폰"};
 //    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다"};
 //    String[] motion = {"가족","감사","괜찮아"};
-    String[] motion18 = {"감사합니다","괜찮습니다","귀엽다","쓰다","안경","오전","오토바이","오후","책","컵"};
+    String[] motion18 = {"감사합니다", "괜찮습니다", "귀엽다", "쓰다", "안경", "오전", "오토바이", "오후", "책", "컵"};
 
     int listFlag = 0;
     //리사이클러뷰
     Holistic_Adapter adapter;
     private RecyclerView.LayoutManager mLayoutmanager;
     public static List<String> dataList = new ArrayList<>();
-    public static List<Holistic_data> recogList= new ArrayList<>();
+    public static List<Holistic_data> recogList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,10 +129,10 @@ public class holistic_activity extends AppCompatActivity {
         setContentView(R.layout.activity_holistic_activity);
 
         HashMap<String, float[][]> LandmarkMap = new HashMap<>();
-        LandmarkMap.put("pose",null);
-        LandmarkMap.put("leftHand",null);
-        LandmarkMap.put("rightHand",null);
-        LandmarkMap.put("face",null);
+        LandmarkMap.put("pose", null);
+        LandmarkMap.put("leftHand", null);
+        LandmarkMap.put("rightHand", null);
+        LandmarkMap.put("face", null);
 
         RetrofitClient retrofitClient = new RetrofitClient();
         retrofitClient.generateClient();
@@ -144,22 +146,22 @@ public class holistic_activity extends AppCompatActivity {
         mLayoutmanager = new LinearLayoutManager(getApplication());
         recogWordRecyclerView.setLayoutManager(mLayoutmanager);
 
-        adapter=new Holistic_Adapter(getApplication(),recogList);
+        adapter = new Holistic_Adapter(getApplication(), recogList);
         recogWordRecyclerView.setAdapter(adapter);
 //돌아가기 버튼
         backBtn = findViewById(R.id.BackBtn);
-        backBtn.setOnClickListener(new View.OnClickListener(){
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 finish();
             }
         });
 //인식된 단어 목록 보기 버튼
-        recogWordListBtn.setOnClickListener(new View.OnClickListener(){
+        recogWordListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                if(listFlag==0){ //목록이 닫혀 있는 상태라면,
-                    adapter=new Holistic_Adapter(getApplication(),recogList);
+            public void onClick(View view) {
+                if (listFlag == 0) { //목록이 닫혀 있는 상태라면,
+                    adapter = new Holistic_Adapter(getApplication(), recogList);
 //                1. 인식된 단어 목록 버튼의 글씨가 "단어 목록 닫기"로 변경되기
                     recogWordListBtn.setText("단어 목록 닫기");
 //                2. recyclerview visibility=visible
@@ -169,12 +171,12 @@ public class holistic_activity extends AppCompatActivity {
 //                4. preview_display_layout visibility=gone
                     previewDisplayLayout.setVisibility(View.GONE);
 //                5. listFlag값 1로 변경(열림 상태)
-                    listFlag=1;
+                    listFlag = 1;
 //               어댑터 연결
                     recogWordRecyclerView.setAdapter(adapter);
 
 
-                } else{ //목록이 열려 있는 상태라면,
+                } else { //목록이 열려 있는 상태라면,
 //                1. 인식된 단어 목록 버튼의 글씨가 "인식된 단어 목록"으로 변경되기
                     recogWordListBtn.setText("인식된 단어 목록");
 //                2. recyclerview visibility=gone
@@ -184,7 +186,7 @@ public class holistic_activity extends AppCompatActivity {
 //                4. preview_display_layout visibility=visible
                     previewDisplayLayout.setVisibility(View.VISIBLE);
 //                5. listFlag값 0으로 변경(닫힘 상태)
-                    listFlag=0;
+                    listFlag = 0;
                     dataList.clear();
                     recogList.clear();
                 }
@@ -219,28 +221,13 @@ public class holistic_activity extends AppCompatActivity {
         processor
                 .addPacketCallback("face_landmarks", (packet) -> {
                     try {
-//                        Log.d("ㄱ", "face");
+
                         byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                         LandmarkProto.NormalizedLandmarkList poseLandmarks = LandmarkProto.NormalizedLandmarkList.parseFrom(landmarksRaw);
-//                        Log.v("AAA", String.valueOf(packet));
-//                        LandmarkProto.NormalizedLandmarkList poseLandmarks =
-//                                PacketGetter.getProto(packet, LandmarkProto.NormalizedLandmarkList.class);
-//                        Log.v(
-//                                "AAA_FL",
-//                                "[TS:"
-//                                        + packet.getTimestamp()
-//                                        + "] "
-//                                        + getPoseLandmarksDebugString(poseLandmarks));
-
-                        LandmarkMap.put("face",getPoseLandmarksDebugAry(poseLandmarks));
-//                        Log.e("입력된 값", String.valueOf(getPoseLandmarksDebugAry(poseLandmarks)));
-                        if(LandmarkMap.get("leftHand")==null && LandmarkMap.get("rightHand")==null){
-//                            answerFrame.setText("손이 보이지 않아서 인식이 되지 않아요");
-                        }else {
+                        LandmarkMap.put("face", getPoseLandmarksDebugAry(poseLandmarks));
+                        if (LandmarkMap.get("leftHand") == null && LandmarkMap.get("rightHand") == null) {
+                        } else {
                             Call<JsonElement> callAPI = retrofitClient.getApi().sendLandmark(LandmarkMap);
-                            Log.e("입력된 값", String.valueOf(LandmarkMap));
-
-
                             callAPI.enqueue(new Callback<JsonElement>() {
                                 @Override
                                 public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
@@ -251,7 +238,6 @@ public class holistic_activity extends AppCompatActivity {
                                     LandmarkMap.put("face", null);
                                     // api로부터 받은 계산된 좌표값을 모델의 input 형태에 맞게 변환 (JsonElement -> JsonArray -> String -> String[])
                                     JsonArray DictResponseArray = response.body().getAsJsonArray();
-                                    Log.e("받아온 값", String.valueOf(DictResponseArray));
 
                                     String StringResponse = String.valueOf(DictResponseArray);
                                     StringResponse = StringResponse.replace("[", "");
@@ -264,7 +250,6 @@ public class holistic_activity extends AppCompatActivity {
                                         if (l < 30) {
                                             for (int j = 0; j < 524; j++) {
                                                 queue.offer(Float.parseFloat(strArr[j]));
-//                                                Log.e("큐 offer1", String.valueOf(queue.size()));
                                             }
                                             l++;
                                         } else {
@@ -285,8 +270,8 @@ public class holistic_activity extends AppCompatActivity {
                                             lite.run(input_data, output_data);
                                             // 3. 모델에서 계산된 분석값을 이용해 올바른 번역 결과 보여주기
                                             // 3-(1). 모델에서 계산된 단어 별 분석값을 로그에 출력
-                                            for(int l=0; l<10; l++){
-                                                Log.e("최고가 되고 싶은 분석 값",String.valueOf(l)+":"+String.valueOf(output_data[0][l]));
+                                            for (int l = 0; l < 10; l++) {
+                                                Log.e("최고가 되고 싶은 분석 값", String.valueOf(l) + ":" + String.valueOf(output_data[0][l]));
                                             }
                                             // 3-(2). 분석값 중 최고값을 찾기 maxNum:최고값, maxLoc:최고값의 배열 내 위치
                                             float maxNum = 0;
@@ -297,47 +282,24 @@ public class holistic_activity extends AppCompatActivity {
                                                     maxLoc = x;
                                                 }
                                             }
-                                            Log.e("최고값!!!",String.valueOf(maxNum));
+                                            Log.e("최고값!!!", String.valueOf(maxNum));
 
                                             // 3-(3). 정확도를 높이기 위해 (1)최고값이 0.7이상이고 (2)최고값이 5번 연속으로 출력되어야만 옳은 결과값으로 선택하기
-                                                if(maxNum >= 0.5){
+                                            if (maxNum >= 0.5) {
+                                                // 3-(4). 올바른 번역값 출력하기
+                                                if (maxLoc != -1) {
+                                                    Log.e("번역 : ", motion18[maxLoc]);
+                                                    answerFrame.setText(motion18[maxLoc]);
 
-                                                    //🎃최고값이 5번 연속 출력될 때의 조건 구현 아직 못 했음.. (._.
-
-                                                    //maxLoc값을 5개 받는다
-//                                            answerQueue.offer(maxLoc);
-                                                    //값이 5개가 되면 각 원소들이 모두 일치하는지 확인한다.
-//                                            if(answerQueue.size()==5){
-//
-//                                            }
-                                                    //값이 같다면, 그대로 출력하기
-                                                    //새로운 6번째 값이 들어오면 poll후 offer한다.
-//                                            if(answerQueue.size()<5){
-//                                                answerQueue.offer(maxLoc);
-//                                            }else{
-//                                                answerQueue.poll();
-//                                                answerQueue.offer(maxLoc);
-//                                                Iterator answeriter = answerQueue.iterator();
-//                                                while (answeriter.hasNext()) {
-//                                                    for (int j = 0; j < 4; j++) {
-////                                                        answeriter.next()
-//                                                    }
-//                                                }
-//                                            }
-                                                    // 3-(4). 올바른 번역값 출력하기
-                                                    if (maxLoc != -1) {
-                                                        Log.e("번역 : ", motion18[maxLoc]);
-                                                        answerFrame.setText(motion18[maxLoc]);
-
-                                                        //[단어 저장 기능]인식된 단어 배열에 저장하기
-                                                        if(dataList.contains(motion18[maxLoc])==false){
-                                                            dataList.add(motion18[maxLoc]);
-                                                            recogList.add(new Holistic_data(motion18[maxLoc]));
-                                                            recogWordRecyclerView.setAdapter(adapter);
-                                                        }
-
+                                                    //[단어 저장 기능]인식된 단어 배열에 저장하기
+                                                    if (dataList.contains(motion18[maxLoc]) == false) {
+                                                        dataList.add(motion18[maxLoc]);
+                                                        recogList.add(new Holistic_data(motion18[maxLoc]));
+                                                        recogWordRecyclerView.setAdapter(adapter);
                                                     }
-                                                } else {//분석값이 낮아서 무슨 동작인지 인식이 되지 않을 때
+
+                                                }
+                                            } else {//분석값이 낮아서 무슨 동작인지 인식이 되지 않을 때
                                                 answerFrame.setText("  ");
                                             }
                                         }
@@ -361,19 +323,9 @@ public class holistic_activity extends AppCompatActivity {
         processor
                 .addPacketCallback("pose_landmarks", (packet) -> {
                     try {
-//                        Log.d("ㄱ", "pose");
                         byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                         LandmarkProto.NormalizedLandmarkList poseLandmarks = LandmarkProto.NormalizedLandmarkList.parseFrom(landmarksRaw);
-//                        Log.v("AAA", String.valueOf(packet));
-//                        LandmarkProto.NormalizedLandmarkList poseLandmarks =
-//                                PacketGetter.getProto(packet, LandmarkProto.NormalizedLandmarkList.class);
-//                        Log.v(
-//                                "AAA_PL",
-//                                "[TS:"
-//                                        + packet.getTimestamp()
-//                                        + "] "
-//                                        + getPoseLandmarksDebugString(poseLandmarks));
-                        LandmarkMap.put("pose",getPoseLandmarksDebugAry(poseLandmarks));
+                        LandmarkMap.put("pose", getPoseLandmarksDebugAry(poseLandmarks));
                     } catch (InvalidProtocolBufferException e) {
                         Log.e("AAA", "Failed to get proto.", e);
                     }
@@ -385,16 +337,7 @@ public class holistic_activity extends AppCompatActivity {
                         Log.d("ㄱ", "left");
                         byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                         LandmarkProto.NormalizedLandmarkList poseLandmarks = LandmarkProto.NormalizedLandmarkList.parseFrom(landmarksRaw);
-//                        Log.v("AAA", String.valueOf(packet));
-//                        LandmarkProto.NormalizedLandmarkList poseLandmarks =
-//                                PacketGetter.getProto(packet, LandmarkProto.NormalizedLandmarkList.class);
-//                        Log.v(
-//                                "AAA_LH",
-//                                "[TS:"
-//                                        + packet.getTimestamp()
-//                                        + "] "
-//                                        + getPoseLandmarksDebugString(poseLandmarks));
-                        LandmarkMap.put("leftHand",getPoseLandmarksDebugAry(poseLandmarks));
+                        LandmarkMap.put("leftHand", getPoseLandmarksDebugAry(poseLandmarks));
                     } catch (InvalidProtocolBufferException e) {
                         Log.e("AAA", "Failed to get proto.", e);
                     }
@@ -406,35 +349,20 @@ public class holistic_activity extends AppCompatActivity {
                         Log.d("ㄱ", "right");
                         byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                         LandmarkProto.NormalizedLandmarkList poseLandmarks = LandmarkProto.NormalizedLandmarkList.parseFrom(landmarksRaw);
-//                        Log.v("AAA", String.valueOf(packet));
-//                        LandmarkProto.NormalizedLandmarkList poseLandmarks =
-//                                PacketGetter.getProto(packet, LandmarkProto.NormalizedLandmarkList.class);
-//                        Log.v(
-//                                "AAA_RH",
-//                                "[TS:"
-//                                        + packet.getTimestamp()
-//                                        + "] "
-//                                        + getPoseLandmarksDebugString(poseLandmarks));
-                        LandmarkMap.put("rightHand",getPoseLandmarksDebugAry(poseLandmarks));
+                        LandmarkMap.put("rightHand", getPoseLandmarksDebugAry(poseLandmarks));
                     } catch (InvalidProtocolBufferException e) {
                         Log.e("AAA", "Failed to get proto.", e);
                     }
-
                 });
-
         processor
                 .getVideoSurfaceOutput()
                 .setFlipY(
                         applicationInfo.metaData.getBoolean("flipFramesVertically", FLIP_FRAMES_VERTICALLY));
-
-
         PermissionHelper.checkAndRequestCameraPermissions(this);
-
-
     }
 
     // 좌표값 숫자 배열로 변환해서 반환하는 코드
-    private static float[][] getPoseLandmarksDebugAry(LandmarkProto.NormalizedLandmarkList poseLandmarks){
+    private static float[][] getPoseLandmarksDebugAry(LandmarkProto.NormalizedLandmarkList poseLandmarks) {
         float[][] poseLandmarkAry = new float[poseLandmarks.getLandmarkCount()][3];
         int landmarkIndex = 0;
         for (LandmarkProto.NormalizedLandmark landmark : poseLandmarks.getLandmarkList()) {
@@ -543,24 +471,24 @@ public class holistic_activity extends AppCompatActivity {
                             }
                         });
     }
-    
-//    tflite 관련 코드
-    private Interpreter getTfliteInterpreter(String modelPath){
-        try{
+
+    //    tflite 관련 코드
+    private Interpreter getTfliteInterpreter(String modelPath) {
+        try {
             return new Interpreter(loadModelFile(holistic_activity.this, modelPath));
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
     public MappedByteBuffer loadModelFile(Activity activity, String modelPath) throws IOException {
         AssetFileDescriptor fileDescriptor = activity.getAssets().openFd(modelPath);
         FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
         FileChannel fileChannel = inputStream.getChannel();
         long startOffset = fileDescriptor.getStartOffset();
         long declaredLength = fileDescriptor.getDeclaredLength();
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY,startOffset,declaredLength);
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
     }
 }
 

@@ -95,13 +95,10 @@ public class Holistic_Adapter extends RecyclerView.Adapter<Holistic_Adapter.Item
                         public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
                             if (response.code() == 200) {
                                 Toast.makeText(context,"단어장에 추가되었습니다",Toast.LENGTH_SHORT).show();
-                                Log.e("('a' ", "추가 성공!");
                             } else {
                                 Toast.makeText(context, "이미 추가된 단어입니다.", Toast.LENGTH_SHORT).show();
-                                Log.e("(._. ", "추가 실패!");
                             }
                         }
-
                         @Override
                         public void onFailure(Call<JsonElement> call, Throwable t) {
                             Log.e("('-' 여기는 딕트 (", "연결 실패!");
@@ -111,5 +108,4 @@ public class Holistic_Adapter extends RecyclerView.Adapter<Holistic_Adapter.Item
             });
         }
     }
-
 }

@@ -25,14 +25,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
     //백엔드 연동
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
     // AWS - back 연결
     public static String BASE_URL = "http://ec2-3-36-61-222.ap-northeast-2.compute.amazonaws.com:3001";
 
-    public static String getBASE_URL(){
+    public static String getBASE_URL() {
         return BASE_URL;
     }
 
@@ -52,11 +52,11 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        logEmail=findViewById(R.id.logEmail);
-        logpass=findViewById(R.id.logpass);
-        login=findViewById(R.id.login);
-        findpass=findViewById(R.id.findpass);
-        joinin=findViewById(R.id.joinin);
+        logEmail = findViewById(R.id.logEmail);
+        logpass = findViewById(R.id.logpass);
+        login = findViewById(R.id.login);
+        findpass = findViewById(R.id.findpass);
+        joinin = findViewById(R.id.joinin);
 
         //retrofit build
         retrofit = new Retrofit.Builder()
@@ -64,22 +64,20 @@ public class LoginActivity extends AppCompatActivity{
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         retrofitInterface = retrofit.create(RetrofitInterface.class);
-        System.out.println("결과 : "+p_name);
+        System.out.println("결과 : " + p_name);
         //로그인 버튼 선택 시
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //로그인 핸들러 호출
                 handleLogin();
-//                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-//                startActivity(intent);
             }
         });
         //비밀번호 찾기
         findpass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getApplicationContext(), Forgot_pw_Activity.class);
+                Intent intent = new Intent(getApplicationContext(), Forgot_pw_Activity.class);
                 startActivity(intent);
             }
         });
@@ -87,29 +85,30 @@ public class LoginActivity extends AppCompatActivity{
         joinin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getApplicationContext(), JoinActivity.class);
+                Intent intent = new Intent(getApplicationContext(), JoinActivity.class);
                 startActivity(intent);
             }
         });
 
 
     }
+
     //로그인 핸들러 만들기
-    private void handleLogin(){
+    private void handleLogin() {
         logEmail = findViewById(R.id.logEmail);
         logpass = findViewById(R.id.logpass);
         //HashMap에 로그인 정보 저장
         HashMap<String, String> map = new HashMap<>();
 
-        map.put("email",logEmail.getText().toString());
-        map.put("password",logpass.getText().toString());
+        map.put("email", logEmail.getText().toString());
+        map.put("password", logpass.getText().toString());
 
         Call<LoginResult> call = retrofitInterface.executeLogin(map);
 
-        call.enqueue(new Callback<LoginResult>(){
+        call.enqueue(new Callback<LoginResult>() {
             @Override
-            public void onResponse(Call<LoginResult> call, Response<LoginResult> response){
-                if(response.code() == 201){
+            public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                if (response.code() == 201) {
                     LoginResult result = response.body();
 
                     intent_email = result.getEmail();
@@ -118,20 +117,19 @@ public class LoginActivity extends AppCompatActivity{
                     intent_name = result.getName();
 
                     //로그인 성공 시 메인으로
-                    Intent intent= new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     Bundle bundle = new Bundle();
 
-                    bundle.putString("email",intent_email);
+                    bundle.putString("email", intent_email);
                     bundle.putString("password", intent_password);
-                    bundle.putString("name",intent_name);
-                    bundle.putInt("UserID",intent_userID);
+                    bundle.putString("name", intent_name);
+                    bundle.putInt("UserID", intent_userID);
                     intent.putExtras(bundle);
 
                     startActivity(intent);
 
-                }
-                else if(response.code() == 404){
+                } else if (response.code() == 404) {
                     Toast.makeText(LoginActivity.this, "404 오류", Toast.LENGTH_LONG).show();
                 }
             }
@@ -143,6 +141,7 @@ public class LoginActivity extends AppCompatActivity{
         });
 
     }
+
     //키보드 내리기
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {

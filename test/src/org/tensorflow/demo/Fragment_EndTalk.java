@@ -21,7 +21,7 @@ public class Fragment_EndTalk extends Fragment {
     //카메라
     CameraSurfaceView surfaceView;
     //권한
-    private final int MY_PERMISSIONS_REQUEST_CAMERA=1001;
+    private final int MY_PERMISSIONS_REQUEST_CAMERA = 1001;
     Context ct;
 
     @Nullable
@@ -44,14 +44,17 @@ public class Fragment_EndTalk extends Fragment {
         }
         return v;
     }
-    public void onRequestPermissionResult(int requestCode, String permissions[], int[] grantResults){
-        switch(requestCode){
-            case MY_PERMISSIONS_REQUEST_CAMERA:{
+
+    public void onRequestPermissionResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
                 //비어있을 때
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(ct,"승인이 허가되어 있습니다.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(ct, "승인이 허가되어 있습니다.", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(ct,"아직 승인받지 않았습니다.",Toast.LENGTH_LONG).show(); } return;
+                    Toast.makeText(ct, "아직 승인받지 않았습니다.", Toast.LENGTH_LONG).show();
+                }
+                return;
             }
         }
     }

@@ -1,14 +1,11 @@
 package org.tensorflow.demo;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
-import android.graphics.Color;
 import android.graphics.SurfaceTexture;
-import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -61,6 +58,7 @@ public class quiz_media extends AppCompatActivity {
     private static final boolean FLIP_FRAMES_VERTICALLY = false;
 
     private Button backBtn;
+
     static {
         System.loadLibrary("mediapipe_jni");
         try {
@@ -82,7 +80,6 @@ public class quiz_media extends AppCompatActivity {
     int l = 0;
     private int flag = 0;
     Queue<Float> queue = new LinkedList<>();
-    Queue<Integer> answerQueue = new LinkedList<>();
 
     String name;
     String video;
@@ -92,7 +89,7 @@ public class quiz_media extends AppCompatActivity {
 //            "어디","어제","언제","얼굴","여동생","오전","오토바이","오후","좋다","지금",
 //            "책","컵","휴대폰"};
 //    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다","먹다"};
-    String[] motion = {"가족","감사합니다","괜찮습니다"};
+    String[] motion = {"가족", "감사합니다", "괜찮습니다"};
 
 
     @Override
@@ -100,22 +97,18 @@ public class quiz_media extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_media);
 
-        Intent intent=getIntent();
-        name=intent.getStringExtra("단어이름");
-        video=intent.getStringExtra("단어영상");
-
-        //Log.e("제대로 왔냐?", name);
+        Intent intent = getIntent();
+        name = intent.getStringExtra("단어이름");
+        video = intent.getStringExtra("단어영상");
 
         HashMap<String, float[][]> LandmarkMap = new HashMap<>();
-        LandmarkMap.put("pose",null);
-        LandmarkMap.put("leftHand",null);
-        LandmarkMap.put("rightHand",null);
-        LandmarkMap.put("face",null);
+        LandmarkMap.put("pose", null);
+        LandmarkMap.put("leftHand", null);
+        LandmarkMap.put("rightHand", null);
+        LandmarkMap.put("face", null);
 
         RetrofitClient retrofitClient = new RetrofitClient();
         retrofitClient.generateClient();
-
-        TextView answerFrame;
 
         TextView actResult = findViewById(R.id.actResult);
         LinearLayout cor_show_video = findViewById(R.id.cor_show_video);
@@ -125,9 +118,9 @@ public class quiz_media extends AppCompatActivity {
         VideoView videoV = findViewById(R.id.videoV);
 
         backBtn = findViewById(R.id.BackBtn);
-        backBtn.setOnClickListener(new View.OnClickListener(){
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 finish();
             }
         });
@@ -158,129 +151,116 @@ public class quiz_media extends AppCompatActivity {
                 .addPacketCallback("face_landmarks", (packet) -> {
                     final String[] nowAnswer = {""};
 
-                        try {
-                            byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
-                            LandmarkProto.NormalizedLandmarkList poseLandmarks = LandmarkProto.NormalizedLandmarkList.parseFrom(landmarksRaw);
+                    try {
+                        byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
+                        LandmarkProto.NormalizedLandmarkList poseLandmarks = LandmarkProto.NormalizedLandmarkList.parseFrom(landmarksRaw);
 
-                            LandmarkMap.put("face",getPoseLandmarksDebugAry(poseLandmarks));
-                            if(LandmarkMap.get("leftHand")==null && LandmarkMap.get("rightHand")==null){
-//                            answerFrame.setText("손이 보이지 않아서 인식이 되지 않아요");
-                            }else {
-                                Log.e("햄이네 전언 flag값 : ", String.valueOf(flag));
-                                Log.e("햄이네 전언 : name 값:",name);
+                        LandmarkMap.put("face", getPoseLandmarksDebugAry(poseLandmarks));
+                        if (LandmarkMap.get("leftHand") == null && LandmarkMap.get("rightHand") == null) {
+                        } else {
+                            Call<JsonElement> callAPI = retrofitClient.getApi().sendLandmark(LandmarkMap);
+                            callAPI.enqueue(new Callback<JsonElement>() {
+                                @Override
+                                public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                                    // Landmark Map 값 초기화
+                                    LandmarkMap.put("pose", null);
+                                    LandmarkMap.put("leftHand", null);
+                                    LandmarkMap.put("rightHand", null);
+                                    LandmarkMap.put("face", null);
+                                    // api로부터 받은 계산된 좌표값을 모델의 input 형태에 맞게 변환 (JsonElement -> JsonArray -> String -> String[])
+                                    JsonArray DictResponseArray = response.body().getAsJsonArray();
 
-                                Call<JsonElement> callAPI = retrofitClient.getApi().sendLandmark(LandmarkMap);
-                                Log.e("입력된 값", String.valueOf(LandmarkMap));
+                                    String StringResponse = String.valueOf(DictResponseArray);
+                                    StringResponse = StringResponse.replace("[", "");
+                                    StringResponse = StringResponse.replace("]", "");
+                                    String[] strArr = StringResponse.split(",");
 
-                                callAPI.enqueue(new Callback<JsonElement>() {
-                                    @Override
-                                    public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                                        // Landmark Map 값 초기화
-                                        LandmarkMap.put("pose", null);
-                                        LandmarkMap.put("leftHand", null);
-                                        LandmarkMap.put("rightHand", null);
-                                        LandmarkMap.put("face", null);
-                                        // api로부터 받은 계산된 좌표값을 모델의 input 형태에 맞게 변환 (JsonElement -> JsonArray -> String -> String[])
-                                        JsonArray DictResponseArray = response.body().getAsJsonArray();
-                                        Log.e("받아온 값", String.valueOf(DictResponseArray));
-
-                                        String StringResponse = String.valueOf(DictResponseArray);
-                                        StringResponse = StringResponse.replace("[", "");
-                                        StringResponse = StringResponse.replace("]", "");
-                                        String[] strArr = StringResponse.split(",");
-
-                                        try {
-                                            //1. 배열에 계산된 좌표값을 30개씩 받아와야 함. (String[] -> Float)
-                                            //1-(1). 배열은 stack형식으로 받아야 함!!
-                                            if (l < 30) {
-                                                for (int j = 0; j < 524; j++) {
-                                                    queue.offer(Float.parseFloat(strArr[j]));
-//                                                Log.e("큐 offer1", String.valueOf(queue.size()));
-                                                }
-                                                l++;
-                                            } else {
-                                                for (int j = 0; j < 524; j++) {
-                                                    queue.poll();
-                                                    queue.offer(Float.parseFloat(strArr[j]));
-                                                }
-                                                Iterator iter = queue.iterator();
-                                                while (iter.hasNext()) {
-                                                    for (int j = 0; j < 30; j++) {
-                                                        for (int k = 0; k < 524; k++) {
-                                                            input_data[0][j][k] = (float) iter.next();
-                                                        }
+                                    try {
+                                        //1. 배열에 계산된 좌표값을 30개씩 받아와야 함. (String[] -> Float)
+                                        //1-(1). 배열은 stack형식으로 받아야 함!!
+                                        if (l < 30) {
+                                            for (int j = 0; j < 524; j++) {
+                                                queue.offer(Float.parseFloat(strArr[j]));
+                                            }
+                                            l++;
+                                        } else {
+                                            for (int j = 0; j < 524; j++) {
+                                                queue.poll();
+                                                queue.offer(Float.parseFloat(strArr[j]));
+                                            }
+                                            Iterator iter = queue.iterator();
+                                            while (iter.hasNext()) {
+                                                for (int j = 0; j < 30; j++) {
+                                                    for (int k = 0; k < 524; k++) {
+                                                        input_data[0][j][k] = (float) iter.next();
                                                     }
-                                                }
-                                                // 2. 30개가 되면 모델에게 보내기
-                                                Interpreter lite = getTfliteInterpreter("AAAA13.tflite");
-                                                lite.run(input_data, output_data);
-                                                // 3. 모델에서 계산된 분석값을 이용해 올바른 번역 결과 보여주기
-                                                // 3-(1). 모델에서 계산된 단어 별 분석값을 로그에 출력
-                                                for(int l=0; l<3; l++){
-                                                    Log.e("최고가 되고 싶은 분석 값",String.valueOf(l)+":"+String.valueOf(output_data[0][l]));
-                                                }
-                                                // 3-(2). 분석값 중 최고값을 찾기 maxNum:최고값, maxLoc:최고값의 배열 내 위치
-                                                float maxNum = 0;
-                                                int maxLoc = -1;
-                                                for (int x = 0; x < 3; x++) {
-                                                    if (maxNum < output_data[0][x]) {
-                                                        maxNum = output_data[0][x];
-                                                        maxLoc = x;
-                                                    }
-                                                }
-                                                Log.e("최고값!!!",String.valueOf(maxNum));
-
-                                                // 3-(3). 정확도를 높이기 위해 (1)최고값이 0.7이상이고 (2)최고값이 5번 연속으로 출력되어야만 옳은 결과값으로 선택하기
-                                                if(maxNum >= 0.5){
-
-                                                    // 3-(4). 올바른 번역값 출력하기
-                                                    if (maxLoc != -1) {
-                                                        Log.e("번역 : ", motion[maxLoc]);
-                                                        nowAnswer[0] =motion[maxLoc];
-                                                        Log.e("햄이네 박사의 번역 결과:",nowAnswer[0]);
-                                                        if(nowAnswer[0].equals(name)){
-                                                            flag=1;
-                                                            //A. 숨겨져있던 버튼들 보여주기
-                                                            showButtons.setVisibility(View.VISIBLE);
-                                                            //B. 글씨도 보여주기
-                                                            actResult.setVisibility(View.VISIBLE);
-
-
-                                                        }
-//                                                    answerFrame.setText(motion[maxLoc]);
-                                                    }
-                                                } else {//분석값이 낮아서 무슨 동작인지 인식이 되지 않을 때
-//                                                answerFrame.setText("  ");
                                                 }
                                             }
+                                            // 2. 30개가 되면 모델에게 보내기
+                                            Interpreter lite = getTfliteInterpreter("AAAA13.tflite");
+                                            lite.run(input_data, output_data);
+                                            // 3. 모델에서 계산된 분석값을 이용해 올바른 번역 결과 보여주기
+                                            // 3-(1). 모델에서 계산된 단어 별 분석값을 로그에 출력
+                                            for (int l = 0; l < 3; l++) {
+                                                Log.e("최고가 되고 싶은 분석 값", String.valueOf(l) + ":" + String.valueOf(output_data[0][l]));
+                                            }
+                                            // 3-(2). 분석값 중 최고값을 찾기 maxNum:최고값, maxLoc:최고값의 배열 내 위치
+                                            float maxNum = 0;
+                                            int maxLoc = -1;
+                                            for (int x = 0; x < 3; x++) {
+                                                if (maxNum < output_data[0][x]) {
+                                                    maxNum = output_data[0][x];
+                                                    maxLoc = x;
+                                                }
+                                            }
+                                            Log.e("최고값!!!", String.valueOf(maxNum));
 
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
+                                            // 3-(3). 정확도를 높이기 위해 (1)최고값이 0.7이상이고 (2)최고값이 5번 연속으로 출력되어야만 옳은 결과값으로 선택하기
+                                            if (maxNum >= 0.5) {
+
+                                                // 3-(4). 올바른 번역값 출력하기
+                                                if (maxLoc != -1) {
+                                                    Log.e("번역 : ", motion[maxLoc]);
+                                                    nowAnswer[0] = motion[maxLoc];
+                                                    if (nowAnswer[0].equals(name)) {
+                                                        flag = 1;
+                                                        //A. 숨겨져있던 버튼들 보여주기
+                                                        showButtons.setVisibility(View.VISIBLE);
+                                                        //B. 글씨도 보여주기
+                                                        actResult.setVisibility(View.VISIBLE);
+                                                    }
+                                                }
+                                            } else {//분석값이 낮아서 무슨 동작인지 인식이 되지 않을 때
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFailure(Call<JsonElement> call, Throwable t) {
-                                        Log.e("실패군", "실패다");
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                     }
-                                });
                                 }
 
-
-                        } catch (InvalidProtocolBufferException e) {
-                            Log.e("AAA", "Failed to get proto.", e);
+                                @Override
+                                public void onFailure(Call<JsonElement> call, Throwable t) {
+                                    Log.e("실패군", "실패다");
+                                }
+                            });
                         }
+
+
+                    } catch (InvalidProtocolBufferException e) {
+                        Log.e("AAA", "Failed to get proto.", e);
+                    }
 
 
                 });
         processor
                 .addPacketCallback("pose_landmarks", (packet) -> {
                     try {
-//                        Log.d("ㄱ", "pose");
+                        Log.d("ㄱ", "pose");
                         byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                         LandmarkProto.NormalizedLandmarkList poseLandmarks = LandmarkProto.NormalizedLandmarkList.parseFrom(landmarksRaw);
 
-                        LandmarkMap.put("pose",getPoseLandmarksDebugAry(poseLandmarks));
+                        LandmarkMap.put("pose", getPoseLandmarksDebugAry(poseLandmarks));
                     } catch (InvalidProtocolBufferException e) {
                         Log.e("AAA", "Failed to get proto.", e);
                     }
@@ -293,7 +273,7 @@ public class quiz_media extends AppCompatActivity {
                         byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                         LandmarkProto.NormalizedLandmarkList poseLandmarks = LandmarkProto.NormalizedLandmarkList.parseFrom(landmarksRaw);
 
-                        LandmarkMap.put("leftHand",getPoseLandmarksDebugAry(poseLandmarks));
+                        LandmarkMap.put("leftHand", getPoseLandmarksDebugAry(poseLandmarks));
                     } catch (InvalidProtocolBufferException e) {
                         Log.e("AAA", "Failed to get proto.", e);
                     }
@@ -306,7 +286,7 @@ public class quiz_media extends AppCompatActivity {
                         byte[] landmarksRaw = PacketGetter.getProtoBytes(packet);
                         LandmarkProto.NormalizedLandmarkList poseLandmarks = LandmarkProto.NormalizedLandmarkList.parseFrom(landmarksRaw);
 
-                        LandmarkMap.put("rightHand",getPoseLandmarksDebugAry(poseLandmarks));
+                        LandmarkMap.put("rightHand", getPoseLandmarksDebugAry(poseLandmarks));
                     } catch (InvalidProtocolBufferException e) {
                         Log.e("AAA", "Failed to get proto.", e);
                     }
@@ -328,9 +308,9 @@ public class quiz_media extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        cor_show_video.setOnClickListener(new View.OnClickListener(){
+        cor_show_video.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 //C. 카메라 안 보여주기
                 preview_display_layout2.setVisibility(View.GONE);
                 //D. 동영상 보여주기
@@ -351,7 +331,7 @@ public class quiz_media extends AppCompatActivity {
     }
 
     // 좌표값 숫자 배열로 변환해서 반환하는 코드
-    private static float[][] getPoseLandmarksDebugAry(LandmarkProto.NormalizedLandmarkList poseLandmarks){
+    private static float[][] getPoseLandmarksDebugAry(LandmarkProto.NormalizedLandmarkList poseLandmarks) {
         float[][] poseLandmarkAry = new float[poseLandmarks.getLandmarkCount()][3];
         int landmarkIndex = 0;
         for (LandmarkProto.NormalizedLandmark landmark : poseLandmarks.getLandmarkList()) {
@@ -462,22 +442,22 @@ public class quiz_media extends AppCompatActivity {
     }
 
     //    tflite 관련 코드
-    private Interpreter getTfliteInterpreter(String modelPath){
-        try{
+    private Interpreter getTfliteInterpreter(String modelPath) {
+        try {
             return new Interpreter(loadModelFile(quiz_media.this, modelPath));
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
     public MappedByteBuffer loadModelFile(Activity activity, String modelPath) throws IOException {
         AssetFileDescriptor fileDescriptor = activity.getAssets().openFd(modelPath);
         FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
         FileChannel fileChannel = inputStream.getChannel();
         long startOffset = fileDescriptor.getStartOffset();
         long declaredLength = fileDescriptor.getDeclaredLength();
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY,startOffset,declaredLength);
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
     }
 
 }

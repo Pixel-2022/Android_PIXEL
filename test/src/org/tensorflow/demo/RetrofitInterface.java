@@ -2,11 +2,7 @@ package org.tensorflow.demo;
 
 
 import com.google.gson.JsonElement;
-
-import org.json.JSONArray;
-
 import java.util.HashMap;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -40,14 +36,6 @@ public interface RetrofitInterface {
 
     @POST("/user/findPW")
     Call<Void> findpw(@Body HashMap<String, String> map);
-
-
-    //    API한테서 값 받아오기
-    @GET("/muzi")
-    Call<JsonElement> getWhatEverMuzi();
-    //    API한테서 값 받아오기
-    @POST("/test")
-    Call<JsonElement> getWhatEver(@Body HashMap<String, float[][]> map);
 
     //    API한테 값 보내주기
     @POST("/point")

@@ -4,16 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,11 +33,11 @@ public class Fragment_WordDict extends Fragment {
     private View v;
     private RecyclerView recyclerView;
     private LinearLayoutManager LinearLayoutManager;
-    ArrayList<Dict> dataList=new ArrayList();
+    ArrayList<Dict> dataList = new ArrayList();
     String[] names;
     String[] images;
     String[] videoURLs;
-    private String BASE_URL=LoginActivity.getBASE_URL();
+    private String BASE_URL = LoginActivity.getBASE_URL();
 
     //필터
     EditText searchET;
@@ -51,13 +48,13 @@ public class Fragment_WordDict extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        v= inflater.inflate(R.layout.f2_worddict,container,false);
+        v = inflater.inflate(R.layout.f2_worddict, container, false);
         Context context = v.getContext();
 
-        filteredList=new ArrayList<>();
+        filteredList = new ArrayList<>();
         // 리사이클
         recyclerView = v.findViewById(R.id.recyclerView1);
-        searchET=v.findViewById(R.id.search_edit);
+        searchET = v.findViewById(R.id.search_edit);
 
 
         //retrofit build
@@ -76,18 +73,17 @@ public class Fragment_WordDict extends Fragment {
                 names = new String[DictResponseArray.size()];
                 images = new String[DictResponseArray.size()];
                 videoURLs = new String[DictResponseArray.size()];
-                for (int i=0; i<DictResponseArray.size();i++){
+                for (int i = 0; i < DictResponseArray.size(); i++) {
                     JsonElement jsonElement = DictResponseArray.get(i);
                     String name = jsonElement.getAsJsonObject().get("Word").getAsString();
                     String videoURL = jsonElement.getAsJsonObject().get("videoURL").getAsString();
                     String wordImg = jsonElement.getAsJsonObject().get("wordImg").getAsString();
-                    names[i]=name;
-                    images[i]=wordImg;
+                    names[i] = name;
+                    images[i] = wordImg;
                     videoURLs[i] = videoURL;
                     dataList.add(new Dict(names[i], images[i], videoURLs[i]));
-                    }
-                Log.e("dataList : ",dataList.get(0).getWord());
-                adapter=new DictAdapter(context, dataList);
+                }
+                adapter = new DictAdapter(context, dataList);
 
                 LinearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                 recyclerView.setLayoutManager(LinearLayoutManager);
@@ -96,9 +92,8 @@ public class Fragment_WordDict extends Fragment {
 
             @Override
             public void onFailure(Call<JsonElement> call, Throwable t) {
-                Log.e("실패군","실패다");
-                dataList.add(new Dict("실패예요","http://drive.google.com/uc?export=view&id=1djpCxxUwXj12MzTCdl-wDZqZIuuJTl7B/view", "ASdasdasdafasdsafad"));
-                adapter=new DictAdapter(context, dataList);
+                dataList.add(new Dict("실패예요", "http://drive.google.com/uc?export=view&id=1djpCxxUwXj12MzTCdl-wDZqZIuuJTl7B/view", "ASdasdasdafasdsafad"));
+                adapter = new DictAdapter(context, dataList);
                 LinearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                 recyclerView.setLayoutManager(LinearLayoutManager);
                 recyclerView.setAdapter(adapter);
@@ -118,7 +113,7 @@ public class Fragment_WordDict extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String searchText=searchET.getText().toString();
+                String searchText = searchET.getText().toString();
                 searchFilter(searchText);
             }
         });
@@ -126,15 +121,16 @@ public class Fragment_WordDict extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
     }
-    public void searchFilter(String searchText){
+
+    public void searchFilter(String searchText) {
         filteredList.clear();
 
         for (int i = 0; i < dataList.size(); i++) {

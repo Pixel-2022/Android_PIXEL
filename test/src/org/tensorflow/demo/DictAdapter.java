@@ -2,7 +2,6 @@ package org.tensorflow.demo;
 
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -37,7 +36,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
     private LayoutInflater inflater;
-    int[] images;
     private Context context;
     //백연결
     private Retrofit retrofit;
@@ -50,7 +48,6 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
     private SparseBooleanArray selectedItems = new SparseBooleanArray();
     //직전에 클릭했던 item의 position
     private int prePosition = -1;
-    //
     private ArrayList<Dict> dict;
 
     Context ct;
@@ -97,16 +94,9 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
             textView = itemView.findViewById(R.id.dict_name);
             save = itemView.findViewById(R.id.save_word);
             showVideo = itemView.findViewById(R.id.show_video);
-            /*dictAct = itemView.findViewById(R.id.dict_act);
-            dictAct.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("아이템 클릭", String.valueOf(getAdapterPosition()));
-                }
-            });*/
+
             save.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    Log.e("포지션", String.valueOf(getAdapterPosition()));
                     custom_dialog(view, getAdapterPosition());
                 }
             });
@@ -114,8 +104,6 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     custom_dialog2(view, getAdapterPosition());
-                    Log.d("비디오에서도 position이 나오나요?", String.valueOf(getAdapterPosition()));
-
                 }
             });
 
@@ -124,7 +112,6 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     MainActivity main = (MainActivity) DictAdapter.this.context;
-                    // main.toMain(b);
                 }
             });
         }
@@ -159,7 +146,6 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
             public void onClick(View v) {
                 Dict dict2 = dict.get(position);
                 String word22 = dict2.getWord();
-                Log.e("추가할 값을 뽑아볼게용", word22);
 
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
@@ -168,7 +154,6 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
                 retrofitInterface = retrofit.create(RetrofitInterface.class);
 
                 HashMap<String, String> map = new HashMap<>();
-                //Log.e("확인 용",stringp_userId);
                 map.put("UserId", stringp_userId);
                 map.put("Word", word22);
 
@@ -180,7 +165,6 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
                             Log.e("('a' ", "추가 성공!");
                         } else {
                             Toast.makeText(v.getContext(), "이미 추가된 단어입니다.", Toast.LENGTH_SHORT).show();
-                            Log.e("(._. ", "추가 실패!");
                         }
                     }
 
@@ -203,7 +187,7 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
         builder.setView(dialogView);
 
         vv = dialogView.findViewById(R.id.videoV);
-        //URL서ㅕㄹ정
+        //URL설정
         Uri videoUri = Uri.parse(dict2.getVideoURL());
         vv.setMediaController(new MediaController(context));
         vv.setVideoURI(videoUri);
