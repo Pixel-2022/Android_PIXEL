@@ -102,8 +102,8 @@ public class holistic_activity extends AppCompatActivity {
 
     // ApplicationInfo for retrieving metadata defined in the manifest.
     private ApplicationInfo applicationInfo;
-    float[][][] input_data = new float[1][30][524];
-    float[][] output_data = new float[1][10];
+    float[][][] input_data = new float[1][30][58];
+    float[][] output_data = new float[1][36];
     int l = 0;
     Queue<Float> queue = new LinkedList<>();
     Queue<Integer> answerQueue = new LinkedList<>();
@@ -114,8 +114,10 @@ public class holistic_activity extends AppCompatActivity {
 //            "책","컵","휴대폰"};
 //    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다"};
 //    String[] motion = {"가족","감사","괜찮아"};
-    String[] motion18 = {"감사합니다", "괜찮습니다", "귀엽다", "쓰다", "안경", "오전", "오토바이", "오후", "책", "컵"};
-
+//    String[] motion18 = {"감사합니다", "괜찮습니다", "귀엽다", "쓰다", "안경", "오전", "오토바이", "오후", "책", "컵"};
+    String[] motion18 = {"가족", "감사", "괜찮아", "구경", "귀엽다", "기차", "나","나이","누구","다시",
+            "당신","만나다","먹다","미안","비빔밥","사람", "시다","쓰다","아깝다","안경","안녕","앉다",
+            "어디","어제","언제","얼굴","여동생","오전","오토바이","오후","좋다","지금","책","컵","호떡","휴대폰"};
     int listFlag = 0;
     //리사이클러뷰
     Holistic_Adapter adapter;
@@ -248,35 +250,35 @@ public class holistic_activity extends AppCompatActivity {
                                         //1. 배열에 계산된 좌표값을 30개씩 받아와야 함. (String[] -> Float)
                                         //1-(1). 배열은 stack형식으로 받아야 함!!
                                         if (l < 30) {
-                                            for (int j = 0; j < 524; j++) {
+                                            for (int j = 0; j < 58; j++) {
                                                 queue.offer(Float.parseFloat(strArr[j]));
                                             }
                                             l++;
                                         } else {
-                                            for (int j = 0; j < 524; j++) {
+                                            for (int j = 0; j < 58; j++) {
                                                 queue.poll();
                                                 queue.offer(Float.parseFloat(strArr[j]));
                                             }
                                             Iterator iter = queue.iterator();
                                             while (iter.hasNext()) {
                                                 for (int j = 0; j < 30; j++) {
-                                                    for (int k = 0; k < 524; k++) {
+                                                    for (int k = 0; k < 58; k++) {
                                                         input_data[0][j][k] = (float) iter.next();
                                                     }
                                                 }
                                             }
                                             // 2. 30개가 되면 모델에게 보내기
-                                            Interpreter lite = getTfliteInterpreter("AAAA18.tflite");
+                                            Interpreter lite = getTfliteInterpreter("Fixed58.tflite");
                                             lite.run(input_data, output_data);
                                             // 3. 모델에서 계산된 분석값을 이용해 올바른 번역 결과 보여주기
                                             // 3-(1). 모델에서 계산된 단어 별 분석값을 로그에 출력
-                                            for (int l = 0; l < 10; l++) {
+                                            for (int l = 0; l < 36; l++) {
                                                 Log.e("최고가 되고 싶은 분석 값", String.valueOf(l) + ":" + String.valueOf(output_data[0][l]));
                                             }
                                             // 3-(2). 분석값 중 최고값을 찾기 maxNum:최고값, maxLoc:최고값의 배열 내 위치
                                             float maxNum = 0;
                                             int maxLoc = -1;
-                                            for (int x = 0; x < 10; x++) {
+                                            for (int x = 0; x < 36; x++) {
                                                 if (maxNum < output_data[0][x]) {
                                                     maxNum = output_data[0][x];
                                                     maxLoc = x;

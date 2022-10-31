@@ -13,19 +13,21 @@ getProject().setBuildDir('gradleBuild')
 
 buildscript {
     repositories {
-        jcenter()
+//        jcenter()
+        mavenCentral()
         google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:4.1.1'
         classpath 'org.apache.httpcomponents:httpclient:4.5.12'
     }
 }
 
 allprojects {
     repositories {
-        jcenter()
+//        jcenter()
+        mavenCentral()
         google()
     }
 }
