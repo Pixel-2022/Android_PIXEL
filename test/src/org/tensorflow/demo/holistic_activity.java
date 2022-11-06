@@ -5,8 +5,10 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.SurfaceTexture;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.tensorflow.lite.Interpreter;
 
+import java.util.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
@@ -52,7 +55,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -103,7 +108,7 @@ public class holistic_activity extends AppCompatActivity {
     // ApplicationInfo for retrieving metadata defined in the manifest.
     private ApplicationInfo applicationInfo;
     float[][][] input_data = new float[1][30][58];
-    float[][] output_data = new float[1][36];
+    float[][] output_data = new float[1][19];
     int l = 0;
     Queue<Float> queue = new LinkedList<>();
     Queue<Integer> answerQueue = new LinkedList<>();
@@ -114,10 +119,13 @@ public class holistic_activity extends AppCompatActivity {
 //            "책","컵","휴대폰"};
 //    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다"};
 //    String[] motion = {"가족","감사","괜찮아"};
-//    String[] motion18 = {"감사합니다", "괜찮습니다", "귀엽다", "쓰다", "안경", "오전", "오토바이", "오후", "책", "컵"};
-    String[] motion18 = {"가족", "감사", "괜찮아", "구경", "귀엽다", "기차", "나","나이","누구","다시",
-            "당신","만나다","먹다","미안","비빔밥","사람", "시다","쓰다","아깝다","안경","안녕","앉다",
-            "어디","어제","언제","얼굴","여동생","오전","오토바이","오후","좋다","지금","책","컵","호떡","휴대폰"};
+//    String[] motion18 = {"가족", "감사", "괜찮아", "구경", "귀엽다", "기차"};
+//    String[] motion18 = {"가족", "감사", "괜찮아", "구경", "귀엽다", "기차", "나","나이","누구","다시",
+//            "당신","만나다","먹다","미안","비빔밥","사람", "시다","쓰다","아깝다","안경","안녕","앉다",
+//            "어디","어제","언제","얼굴","여동생","오전","오토바이","오후","좋다","지금","책","컵","호떡","휴대폰"};
+    String[] motion18 = {"가족", "감사", "귀엽다", "나","다시",
+            "만나다","미안","비빔밥","사람", "안녕","앉다",
+            "어디","언제","여동생","오전","지금","책","컵","휴대폰"};
     int listFlag = 0;
     //리사이클러뷰
     Holistic_Adapter adapter;
@@ -129,6 +137,8 @@ public class holistic_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_holistic_activity);
+
+        HashMap<Integer,Float> SortingMap = new HashMap<>();
 
         HashMap<String, float[][]> LandmarkMap = new HashMap<>();
         LandmarkMap.put("pose", null);
@@ -231,6 +241,7 @@ public class holistic_activity extends AppCompatActivity {
                         } else {
                             Call<JsonElement> callAPI = retrofitClient.getApi().sendLandmark(LandmarkMap);
                             callAPI.enqueue(new Callback<JsonElement>() {
+                                @RequiresApi(api = Build.VERSION_CODES.N)
                                 @Override
                                 public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
                                     // Landmark Map 값 초기화
@@ -268,30 +279,52 @@ public class holistic_activity extends AppCompatActivity {
                                                 }
                                             }
                                             // 2. 30개가 되면 모델에게 보내기
-                                            Interpreter lite = getTfliteInterpreter("Fixed58.tflite");
+                                            Interpreter lite = getTfliteInterpreter("Dense2_05_08.tflite");
                                             lite.run(input_data, output_data);
                                             // 3. 모델에서 계산된 분석값을 이용해 올바른 번역 결과 보여주기
                                             // 3-(1). 모델에서 계산된 단어 별 분석값을 로그에 출력
-                                            for (int l = 0; l < 36; l++) {
+                                            for (int l = 0; l < 19; l++) {
                                                 Log.e("최고가 되고 싶은 분석 값", String.valueOf(l) + ":" + String.valueOf(output_data[0][l]));
                                             }
                                             // 3-(2). 분석값 중 최고값을 찾기 maxNum:최고값, maxLoc:최고값의 배열 내 위치
                                             float maxNum = 0;
                                             int maxLoc = -1;
-                                            for (int x = 0; x < 36; x++) {
+                                            // 배열을 만들어서 output_data의 값을 넣은 후, 정렬하여 높은 값부터 나타냄
+                                            for (int x = 0; x < 19; x++) {
+                                                //key-value : index-value
+                                                SortingMap.put(x,output_data[0][x]);
+                                            }
+                                            List<Map.Entry<Integer, Float>> entries = SortingMap.entrySet().stream()
+                                                    .sorted(Map.Entry.comparingByValue())
+                                                    .collect(Collectors.toList());
+                                            System.out.println(entries);
+
+                                            for (int x = 0; x < 19; x++) {
                                                 if (maxNum < output_data[0][x]) {
                                                     maxNum = output_data[0][x];
                                                     maxLoc = x;
                                                 }
                                             }
                                             Log.e("최고값!!!", String.valueOf(maxNum));
+//                                            첫번째, 두번째, 세번째 번역값 출력하는 코드
+                                            String firstWord = "1."+motion18[entries.get(18).getKey()];
+                                            String secondWord = "2."+motion18[entries.get(17).getKey()];
 
+                                            answerFrame.setText(firstWord+" "+secondWord);
+                                            if(entries.get(17).getValue() >= 0.2){
+                                                //[단어 저장 기능]인식된 단어 배열에 저장하기
+                                                if (dataList.contains(motion18[entries.get(17).getKey()]) == false) {
+                                                    dataList.add(motion18[entries.get(17).getKey()]);
+                                                    recogList.add(new Holistic_data(motion18[entries.get(17).getKey()]));
+                                                    recogWordRecyclerView.setAdapter(adapter);
+                                                }
+                                            }
                                             // 3-(3). 정확도를 높이기 위해 (1)최고값이 0.7이상이고 (2)최고값이 5번 연속으로 출력되어야만 옳은 결과값으로 선택하기
                                             if (maxNum >= 0.5) {
                                                 // 3-(4). 올바른 번역값 출력하기
                                                 if (maxLoc != -1) {
                                                     Log.e("번역 : ", motion18[maxLoc]);
-                                                    answerFrame.setText(motion18[maxLoc]);
+//                                                    answerFrame.setText(motion18[maxLoc]);
 
                                                     //[단어 저장 기능]인식된 단어 배열에 저장하기
                                                     if (dataList.contains(motion18[maxLoc]) == false) {

@@ -75,8 +75,8 @@ public class quiz_media extends AppCompatActivity {
     private EglManager eglManager;
     private ExternalTextureConverter converter;
     private ApplicationInfo applicationInfo;
-    float[][][] input_data = new float[1][30][524];
-    float[][] output_data = new float[1][3];
+    float[][][] input_data = new float[1][30][58];
+    float[][] output_data = new float[1][19];
     int l = 0;
     private int flag = 0;
     Queue<Float> queue = new LinkedList<>();
@@ -89,7 +89,9 @@ public class quiz_media extends AppCompatActivity {
 //            "어디","어제","언제","얼굴","여동생","오전","오토바이","오후","좋다","지금",
 //            "책","컵","휴대폰"};
 //    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다","먹다"};
-    String[] motion = {"가족", "감사합니다", "괜찮습니다"};
+    String[] motion18 = {"가족", "감사", "귀엽다", "나","다시",
+            "만나다","미안","비빔밥","사람", "안녕","앉다",
+            "어디","언제","여동생","오전","지금","책","컵","휴대폰"};
 
 
     @Override
@@ -179,35 +181,35 @@ public class quiz_media extends AppCompatActivity {
                                         //1. 배열에 계산된 좌표값을 30개씩 받아와야 함. (String[] -> Float)
                                         //1-(1). 배열은 stack형식으로 받아야 함!!
                                         if (l < 30) {
-                                            for (int j = 0; j < 524; j++) {
+                                            for (int j = 0; j < 58; j++) {
                                                 queue.offer(Float.parseFloat(strArr[j]));
                                             }
                                             l++;
                                         } else {
-                                            for (int j = 0; j < 524; j++) {
+                                            for (int j = 0; j < 58; j++) {
                                                 queue.poll();
                                                 queue.offer(Float.parseFloat(strArr[j]));
                                             }
                                             Iterator iter = queue.iterator();
                                             while (iter.hasNext()) {
                                                 for (int j = 0; j < 30; j++) {
-                                                    for (int k = 0; k < 524; k++) {
+                                                    for (int k = 0; k < 58; k++) {
                                                         input_data[0][j][k] = (float) iter.next();
                                                     }
                                                 }
                                             }
                                             // 2. 30개가 되면 모델에게 보내기
-                                            Interpreter lite = getTfliteInterpreter("AAAA13.tflite");
+                                            Interpreter lite = getTfliteInterpreter("Dense2_05_08.tflite");
                                             lite.run(input_data, output_data);
                                             // 3. 모델에서 계산된 분석값을 이용해 올바른 번역 결과 보여주기
                                             // 3-(1). 모델에서 계산된 단어 별 분석값을 로그에 출력
-                                            for (int l = 0; l < 3; l++) {
+                                            for (int l = 0; l < 19; l++) {
                                                 Log.e("최고가 되고 싶은 분석 값", String.valueOf(l) + ":" + String.valueOf(output_data[0][l]));
                                             }
                                             // 3-(2). 분석값 중 최고값을 찾기 maxNum:최고값, maxLoc:최고값의 배열 내 위치
                                             float maxNum = 0;
                                             int maxLoc = -1;
-                                            for (int x = 0; x < 3; x++) {
+                                            for (int x = 0; x < 19; x++) {
                                                 if (maxNum < output_data[0][x]) {
                                                     maxNum = output_data[0][x];
                                                     maxLoc = x;
@@ -220,8 +222,8 @@ public class quiz_media extends AppCompatActivity {
 
                                                 // 3-(4). 올바른 번역값 출력하기
                                                 if (maxLoc != -1) {
-                                                    Log.e("번역 : ", motion[maxLoc]);
-                                                    nowAnswer[0] = motion[maxLoc];
+                                                    Log.e("번역 : ", motion18[maxLoc]);
+                                                    nowAnswer[0] = motion18[maxLoc];
                                                     if (nowAnswer[0].equals(name)) {
                                                         flag = 1;
                                                         //A. 숨겨져있던 버튼들 보여주기
