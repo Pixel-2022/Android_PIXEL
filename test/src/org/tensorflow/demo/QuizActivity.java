@@ -30,6 +30,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -55,6 +56,9 @@ public class QuizActivity extends AppCompatActivity {
     int rannum;
     private String BASE_URL = LoginActivity.getBASE_URL();
 
+    private String[] word_only={"가족", "감사", "귀엽다", "나","다시",
+            "만나다","미안","비빔밥","사람", "안녕","앉다",
+            "어디","언제","여동생","오전","지금","책","컵","휴대폰","아깝다"};
 
     // ApplicationInfo for retrieving metadata defined in the manifest.
     private ApplicationInfo applicationInfo;
@@ -84,11 +88,13 @@ public class QuizActivity extends AppCompatActivity {
                     String name = jsonElement.getAsJsonObject().get("Word").getAsString();
                     String videoURL = jsonElement.getAsJsonObject().get("videoURL").getAsString();
                     String wordImg = jsonElement.getAsJsonObject().get("wordImg").getAsString();
-                    names[i] = name;
-                    images[i] = wordImg;
-                    videoURLs[i] = videoURL;
                     //딕트리스트에 사전 단어들 저장.
-                    dictlist.add(new Dict(names[i], images[i], videoURLs[i]));
+                    if(Arrays.asList(word_only).contains(name)){
+                        names[i] = name;
+                        images[i] = wordImg;
+                        videoURLs[i] = videoURL;
+                        dictlist.add(new Dict(names[i], images[i], videoURLs[i]));
+                    }
                 }
                 rannum = getRandom(images);
                 selectImage = images[rannum];
