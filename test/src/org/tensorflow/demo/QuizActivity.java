@@ -80,9 +80,14 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
                 JsonArray DictResponseArray = response.body().getAsJsonArray();
-                names = new String[DictResponseArray.size()];
-                images = new String[DictResponseArray.size()];
-                videoURLs = new String[DictResponseArray.size()];
+                //names = new String[DictResponseArray.size()];
+                //images = new String[DictResponseArray.size()];
+                //videoURLs = new String[DictResponseArray.size()];
+
+                ArrayList<String> names=new ArrayList<>();
+                ArrayList<String> images=new ArrayList<>();
+                ArrayList<String> videoURLs=new ArrayList<>();
+
                 for (int i = 0; i < DictResponseArray.size(); i++) {
                     JsonElement jsonElement = DictResponseArray.get(i);
                     String name = jsonElement.getAsJsonObject().get("Word").getAsString();
@@ -90,14 +95,17 @@ public class QuizActivity extends AppCompatActivity {
                     String wordImg = jsonElement.getAsJsonObject().get("wordImg").getAsString();
                     //딕트리스트에 사전 단어들 저장.
                     if(Arrays.asList(word_only).contains(name)){
-                        names[i] = name;
-                        images[i] = wordImg;
-                        videoURLs[i] = videoURL;
-                        dictlist.add(new Dict(names[i], images[i], videoURLs[i]));
+                        names.add(name);
+                        images.add(wordImg);
+                        videoURLs.add(videoURL);
+                        //names[i] = name;
+                        //images[i] = wordImg;
+                        //videoURLs[i] = videoURL;
+                        dictlist.add(new Dict(name, wordImg, videoURL));
                     }
                 }
-                rannum = getRandom(images);
-                selectImage = images[rannum];
+                rannum = getRandom(images.size());
+                selectImage = images.get(rannum);
                 Glide.with(imgview.getContext()).load(selectImage).into(imgview);
             }
 
@@ -149,8 +157,9 @@ public class QuizActivity extends AppCompatActivity {
 
     }
 
-    public static int getRandom(String[] array) {
-        int rnd = new Random().nextInt(array.length);
+    public static int getRandom(int size) {
+    //public static int getRandom(String[] array) {
+        int rnd = new Random().nextInt(size);
         return rnd;
     }
 
