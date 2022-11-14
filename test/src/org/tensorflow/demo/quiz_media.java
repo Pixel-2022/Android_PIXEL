@@ -76,7 +76,7 @@ public class quiz_media extends AppCompatActivity {
     private ExternalTextureConverter converter;
     private ApplicationInfo applicationInfo;
     float[][][] input_data = new float[1][30][58];
-    float[][] output_data = new float[1][19];
+    float[][] output_data = new float[1][20];
     int l = 0;
     private int flag = 0;
     Queue<Float> queue = new LinkedList<>();
@@ -90,7 +90,7 @@ public class quiz_media extends AppCompatActivity {
 //            "책","컵","휴대폰"};
 //    String[] motion = {"가족","감사","괜찮아","귀엽다","나","나이","누구","다시","당신","만나다","먹다"};
     String[] motion18 = {"가족", "감사", "귀엽다", "나","다시",
-            "만나다","미안","비빔밥","사람", "안녕","앉다",
+            "만나다","미안","비빔밥","사람","아깝다", "안녕","앉다",
             "어디","언제","여동생","오전","지금","책","컵","휴대폰"};
 
 
@@ -199,17 +199,17 @@ public class quiz_media extends AppCompatActivity {
                                                 }
                                             }
                                             // 2. 30개가 되면 모델에게 보내기
-                                            Interpreter lite = getTfliteInterpreter("Dense2_05_08.tflite");
+                                            Interpreter lite = getTfliteInterpreter("tjwjd_78.tflite");
                                             lite.run(input_data, output_data);
                                             // 3. 모델에서 계산된 분석값을 이용해 올바른 번역 결과 보여주기
                                             // 3-(1). 모델에서 계산된 단어 별 분석값을 로그에 출력
-                                            for (int l = 0; l < 19; l++) {
+                                            for (int l = 0; l < 20; l++) {
                                                 Log.e("최고가 되고 싶은 분석 값", String.valueOf(l) + ":" + String.valueOf(output_data[0][l]));
                                             }
                                             // 3-(2). 분석값 중 최고값을 찾기 maxNum:최고값, maxLoc:최고값의 배열 내 위치
                                             float maxNum = 0;
                                             int maxLoc = -1;
-                                            for (int x = 0; x < 19; x++) {
+                                            for (int x = 0; x < 20; x++) {
                                                 if (maxNum < output_data[0][x]) {
                                                     maxNum = output_data[0][x];
                                                     maxLoc = x;

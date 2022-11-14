@@ -49,7 +49,6 @@
         <activity android:name=".JoinActivity" />
         <activity android:name=".Forgot_pw_Activity" />
         <activity android:name=".holistic_activity" />
-        <activity android:name=".EndTalk_Mediapipe_Activity" />
         <activity android:name=".quiz_media"/>
         <activity
             android:name=".DetectorActivity"

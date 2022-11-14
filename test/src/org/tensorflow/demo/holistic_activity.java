@@ -108,7 +108,7 @@ public class holistic_activity extends AppCompatActivity {
     // ApplicationInfo for retrieving metadata defined in the manifest.
     private ApplicationInfo applicationInfo;
     float[][][] input_data = new float[1][30][58];
-    float[][] output_data = new float[1][19];
+    float[][] output_data = new float[1][20];
     int l = 0;
     Queue<Float> queue = new LinkedList<>();
     Queue<Integer> answerQueue = new LinkedList<>();
@@ -124,7 +124,7 @@ public class holistic_activity extends AppCompatActivity {
 //            "당신","만나다","먹다","미안","비빔밥","사람", "시다","쓰다","아깝다","안경","안녕","앉다",
 //            "어디","어제","언제","얼굴","여동생","오전","오토바이","오후","좋다","지금","책","컵","호떡","휴대폰"};
     String[] motion18 = {"가족", "감사", "귀엽다", "나","다시",
-            "만나다","미안","비빔밥","사람", "안녕","앉다",
+            "만나다","미안","비빔밥","사람","아깝다", "안녕","앉다",
             "어디","언제","여동생","오전","지금","책","컵","휴대폰"};
     int listFlag = 0;
     //리사이클러뷰
@@ -279,18 +279,18 @@ public class holistic_activity extends AppCompatActivity {
                                                 }
                                             }
                                             // 2. 30개가 되면 모델에게 보내기
-                                            Interpreter lite = getTfliteInterpreter("Dense2_05_08.tflite");
+                                            Interpreter lite = getTfliteInterpreter("tjwjd_78.tflite");
                                             lite.run(input_data, output_data);
                                             // 3. 모델에서 계산된 분석값을 이용해 올바른 번역 결과 보여주기
                                             // 3-(1). 모델에서 계산된 단어 별 분석값을 로그에 출력
-                                            for (int l = 0; l < 19; l++) {
+                                            for (int l = 0; l < 20; l++) {
                                                 Log.e("최고가 되고 싶은 분석 값", String.valueOf(l) + ":" + String.valueOf(output_data[0][l]));
                                             }
                                             // 3-(2). 분석값 중 최고값을 찾기 maxNum:최고값, maxLoc:최고값의 배열 내 위치
                                             float maxNum = 0;
                                             int maxLoc = -1;
                                             // 배열을 만들어서 output_data의 값을 넣은 후, 정렬하여 높은 값부터 나타냄
-                                            for (int x = 0; x < 19; x++) {
+                                            for (int x = 0; x < 20; x++) {
                                                 //key-value : index-value
                                                 SortingMap.put(x,output_data[0][x]);
                                             }
@@ -299,7 +299,7 @@ public class holistic_activity extends AppCompatActivity {
                                                     .collect(Collectors.toList());
                                             System.out.println(entries);
 
-                                            for (int x = 0; x < 19; x++) {
+                                            for (int x = 0; x < 20; x++) {
                                                 if (maxNum < output_data[0][x]) {
                                                     maxNum = output_data[0][x];
                                                     maxLoc = x;
@@ -307,15 +307,15 @@ public class holistic_activity extends AppCompatActivity {
                                             }
                                             Log.e("최고값!!!", String.valueOf(maxNum));
 //                                            첫번째, 두번째, 세번째 번역값 출력하는 코드
-                                            String firstWord = "1."+motion18[entries.get(18).getKey()];
-                                            String secondWord = "2."+motion18[entries.get(17).getKey()];
+                                            String firstWord = "1."+motion18[entries.get(19).getKey()];
+                                            String secondWord = "2."+motion18[entries.get(18).getKey()];
 
                                             answerFrame.setText(firstWord+" "+secondWord);
-                                            if(entries.get(17).getValue() >= 0.2){
+                                            if(entries.get(18).getValue() >= 0.2){
                                                 //[단어 저장 기능]인식된 단어 배열에 저장하기
-                                                if (dataList.contains(motion18[entries.get(17).getKey()]) == false) {
-                                                    dataList.add(motion18[entries.get(17).getKey()]);
-                                                    recogList.add(new Holistic_data(motion18[entries.get(17).getKey()]));
+                                                if (dataList.contains(motion18[entries.get(18).getKey()]) == false) {
+                                                    dataList.add(motion18[entries.get(18).getKey()]);
+                                                    recogList.add(new Holistic_data(motion18[entries.get(18).getKey()]));
                                                     recogWordRecyclerView.setAdapter(adapter);
                                                 }
                                             }
