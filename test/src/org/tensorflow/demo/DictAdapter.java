@@ -12,6 +12,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -178,29 +179,45 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
         });
     }
 
+
+    MediaController mc;
     public void custom_dialog2(View v, int position) {
         Dict dict2 = dict.get(position);
         VideoView vv;
         View dialogView = inflater.inflate(R.layout.dialog_video, null);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
         builder.setView(dialogView);
-
         vv = dialogView.findViewById(R.id.videoV);
+
+
         //URL설정
         Uri videoUri = Uri.parse(dict2.getVideoURL());
-        vv.setMediaController(new MediaController(context));
+        //vv.setMediaController(new MediaController(inflater.getContext()));
         vv.setVideoURI(videoUri);
 
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+
         vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
+
+                mediaPlayer.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                    @Override
+                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+                        mc = new MediaController(inflater.getContext());
+                        vv.setMediaController(mc);
+                        mc.setAnchorView(vv);
+                        ((ViewGroup) mc.getParent()).removeView(mc);
+                        ((FrameLayout) dialogView.findViewById(R.id.videoViewWrapper)).addView(mc);
+                        mc.setVisibility(View.VISIBLE);
+                    }
+                });
+
                 //비디오 시작
-                vv.start();
+                mediaPlayer.start();
             }
         });
 

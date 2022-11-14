@@ -24,13 +24,19 @@
         android:orientation="vertical"
         android:layout_gravity="center"
         android:gravity="center">
+
         <VideoView
             android:id="@+id/videoV"
             android:layout_width="250dp"
             android:layout_height="300dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"/>
-
+        <FrameLayout
+            android:id="@+id/videoViewWrapper"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/dialog_round"></FrameLayout>
         <TextView
             android:id="@+id/ok_btn"
             android:layout_width="100dp"
