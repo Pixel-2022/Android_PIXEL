@@ -56,9 +56,8 @@ public class QuizActivity extends AppCompatActivity {
     int rannum;
     private String BASE_URL = LoginActivity.getBASE_URL();
 
-    private String[] word_only={"가족", "감사", "귀엽다", "나","다시",
-            "만나다","미안","비빔밥","사람", "안녕","앉다",
-            "어디","언제","여동생","오전","지금","책","컵","휴대폰","아깝다"};
+    private String[] word_only={"귀엽다", "나", "만나다","미안","사람", "앉다",
+            "어디","여동생","오전","지금","휴대폰","아깝다"};
 
     // ApplicationInfo for retrieving metadata defined in the manifest.
     private ApplicationInfo applicationInfo;
