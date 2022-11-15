@@ -48,11 +48,15 @@ public class QuizActivity extends AppCompatActivity {
     private Button action;
     private ImageView imgview;
     private static final String TAG = "QuizActivity";
+
+    ArrayList<String> names=new ArrayList<>();
+    ArrayList<String> images=new ArrayList<>();
+    ArrayList<String> videoURLs=new ArrayList<>();
+
     ArrayList<Dict> dictlist = new ArrayList();
-    String[] names;
-    String[] images;
+
     String selectImage;
-    String[] videoURLs;
+
     int rannum;
     private String BASE_URL = LoginActivity.getBASE_URL();
 
@@ -83,9 +87,7 @@ public class QuizActivity extends AppCompatActivity {
                 //images = new String[DictResponseArray.size()];
                 //videoURLs = new String[DictResponseArray.size()];
 
-                ArrayList<String> names=new ArrayList<>();
-                ArrayList<String> images=new ArrayList<>();
-                ArrayList<String> videoURLs=new ArrayList<>();
+
 
                 for (int i = 0; i < DictResponseArray.size(); i++) {
                     JsonElement jsonElement = DictResponseArray.get(i);
@@ -93,6 +95,7 @@ public class QuizActivity extends AppCompatActivity {
                     String videoURL = jsonElement.getAsJsonObject().get("videoURL").getAsString();
                     String wordImg = jsonElement.getAsJsonObject().get("wordImg").getAsString();
                     //딕트리스트에 사전 단어들 저장.
+                    Log.e("네임",name);
                     if(Arrays.asList(word_only).contains(name)){
                         names.add(name);
                         images.add(wordImg);
@@ -141,8 +144,10 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent actintent = new Intent(getApplicationContext(), quiz_media.class);
-                actintent.putExtra("단어이름", names[rannum]);
-                actintent.putExtra("단어영상", videoURLs[rannum]);
+                Log.e("뭐하지", String.valueOf(rannum));
+
+                actintent.putExtra("단어이름", names.get(rannum));
+                actintent.putExtra("단어영상", videoURLs.get(rannum));
                 startActivity(actintent);
             }
         });

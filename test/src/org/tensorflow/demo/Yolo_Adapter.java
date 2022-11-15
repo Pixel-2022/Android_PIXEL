@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -198,7 +199,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
         });
     }
 
-
+    MediaController mc;
     public void videoDialog(String geturl) {
         VideoView vv;
         View dialogView = inflater.inflate(R.layout.dialog_video, null);
@@ -209,7 +210,7 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
         vv = dialogView.findViewById(R.id.videoV);
 
         Uri videoUri = Uri.parse(geturl);
-        vv.setMediaController(new MediaController(context));
+        //vv.setMediaController(new MediaController(context));
         vv.setVideoURI(videoUri);
 
         final AlertDialog alertDialog = builder.create();
@@ -217,9 +218,24 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-                vv.start();
+
+                mediaPlayer.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                    @Override
+                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+                        mc = new MediaController(inflater.getContext());
+                        vv.setMediaController(mc);
+                        mc.setAnchorView(vv);
+                        ((ViewGroup) mc.getParent()).removeView(mc);
+                        ((FrameLayout) dialogView.findViewById(R.id.videoViewWrapper)).addView(mc);
+                        mc.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                mediaPlayer.start();
+
             }
         });
 

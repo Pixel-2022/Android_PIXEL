@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -176,6 +177,7 @@ public class WordCardAdapter extends RecyclerView.Adapter<WordCardAdapter.ItemVi
         });
     }
 
+    MediaController mc;
     public void custom_dialog2(View v, int position) {
         Data data2 = data.get(position);
         VideoView vv;
@@ -187,7 +189,7 @@ public class WordCardAdapter extends RecyclerView.Adapter<WordCardAdapter.ItemVi
         vv = dialogView.findViewById(R.id.videoV);
         //URL설정
         Uri videoUri = Uri.parse(data2.getVideoURL());
-        vv.setMediaController(new MediaController(context));
+        //vv.setMediaController(new MediaController(context));
         vv.setVideoURI(videoUri);
 
         final AlertDialog alertDialog = builder.create();
@@ -197,8 +199,20 @@ public class WordCardAdapter extends RecyclerView.Adapter<WordCardAdapter.ItemVi
         vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                    @Override
+                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+                        mc = new MediaController(inflater.getContext());
+                        vv.setMediaController(mc);
+                        mc.setAnchorView(vv);
+                        ((ViewGroup) mc.getParent()).removeView(mc);
+                        ((FrameLayout) dialogView.findViewById(R.id.videoViewWrapper)).addView(mc);
+                        mc.setVisibility(View.VISIBLE);
+                    }
+                });
+
                 //비디오 시작
-                vv.start();
+                mediaPlayer.start();
             }
         });
 
