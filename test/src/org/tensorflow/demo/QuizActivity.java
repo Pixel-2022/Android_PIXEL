@@ -16,7 +16,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
@@ -167,6 +169,7 @@ public class QuizActivity extends AppCompatActivity {
         return rnd;
     }
 
+    MediaController mc;
     public void custom_dialog3(int position) {
 
         Dict dict2 = dictlist.get(position);
@@ -189,8 +192,19 @@ public class QuizActivity extends AppCompatActivity {
         vv2.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                        @Override
+                        public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+                            mc = new MediaController(getLayoutInflater().getContext());
+                            vv2.setMediaController(mc);
+                            mc.setAnchorView(vv2);
+                            ((ViewGroup) mc.getParent()).removeView(mc);
+                            ((FrameLayout) dialogView.findViewById(R.id.videoViewWrapper)).addView(mc);
+                            mc.setVisibility(View.VISIBLE);
+                        }
+                    });
                 //비디오 시작
-                vv2.start();
+                mediaPlayer.start();
             }
         });
 

@@ -110,28 +110,33 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
         videoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                DB에 단어가 있는지 먼저 판별할 것
-                HashMap<String, String> map = new HashMap<>();
-                map.put("Word", selectedWord);
-                Call<JsonElement> call1 = retrofitInterface.getDictWord(map);
+//                DB에 단어가 있는지 먼저 판별할 것 => DB에 없는거 부르면 response가 안되는듯 추후 수정
+                if(selectedWord=="컵"||selectedWord=="책"||selectedWord=="휴대폰"||selectedWord=="사람"||selectedWord=="기차"
+                        ||selectedWord=="비빔밥"||selectedWord=="안경"||selectedWord=="오토바이"||selectedWord=="얼굴"||selectedWord=="호떡") {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("Word", selectedWord);
+                    Call<JsonElement> call1 = retrofitInterface.getDictWord(map);
 
-                call1.enqueue(new Callback<JsonElement>() {
-                    @Override
-                    public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                        JsonObject DictResponseArray = response.body().getAsJsonObject();
-                        if (response.code() == 201) {
-                            String vv = DictResponseArray.get("videoURL").getAsString();
-                            videoDialog(vv);
-                        } else {
-                            Toast.makeText(v.getContext(), "DB에 없는 단어입니다. 추후 업데이트 될 예정입니다.", Toast.LENGTH_SHORT).show();
+                    call1.enqueue(new Callback<JsonElement>() {
+                        @Override
+                        public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                            JsonObject DictResponseArray = response.body().getAsJsonObject();
+                            if (response.code() == 201) {
+                                String vv = DictResponseArray.get("videoURL").getAsString();
+                                videoDialog(vv);
+                            } else {
+                                Toast.makeText(v.getContext(), "DB에 없는 단어입니다. 추후 업데이트 될 예정입니다.", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<JsonElement> call, Throwable t) {
-                        Log.e("('-' 여기는 욜로어댑터! (", "연결 실패!");
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<JsonElement> call, Throwable t) {
+                            Log.e("('-' 여기는 욜로어댑터! (", "연결 실패!");
+                        }
+                    });
+                }else {
+                    Toast.makeText(v.getContext(), "DB에 없는 단어입니다. 추후 업데이트 될 예정입니다.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -201,50 +206,52 @@ public class Yolo_Adapter extends RecyclerView.Adapter<Yolo_Adapter.ItemViewHold
 
     MediaController mc;
     public void videoDialog(String geturl) {
-        VideoView vv;
-        View dialogView = inflater.inflate(R.layout.dialog_video, null);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(dialogView);
+            VideoView vv;
+            View dialogView = inflater.inflate(R.layout.dialog_video, null);
 
-        vv = dialogView.findViewById(R.id.videoV);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setView(dialogView);
 
-        Uri videoUri = Uri.parse(geturl);
-        //vv.setMediaController(new MediaController(context));
-        vv.setVideoURI(videoUri);
+            vv = dialogView.findViewById(R.id.videoV);
 
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            Uri videoUri = Uri.parse(geturl);
+            //vv.setMediaController(new MediaController(context));
+            vv.setVideoURI(videoUri);
 
-        vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            final AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
+            vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
-                mediaPlayer.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
-                    @Override
-                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                        mc = new MediaController(inflater.getContext());
-                        vv.setMediaController(mc);
-                        mc.setAnchorView(vv);
-                        ((ViewGroup) mc.getParent()).removeView(mc);
-                        ((FrameLayout) dialogView.findViewById(R.id.videoViewWrapper)).addView(mc);
-                        mc.setVisibility(View.VISIBLE);
-                    }
-                });
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+//오류나서 일단 보류
+//                    mediaPlayer.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+//                        @Override
+//                        public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+//                            mc = new MediaController(dialogView.getContext());
+//                            vv.setMediaController(mc);
+//                            mc.setAnchorView(vv);
+//                            ((ViewGroup) mc.getParent()).removeView(mc);
+//                            ((FrameLayout) dialogView.findViewById(R.id.videoViewWrapper)).addView(mc);
+//                            mc.setVisibility(View.VISIBLE);
+//                        }
+//                    });
 
-                mediaPlayer.start();
+                    mediaPlayer.start();
 
-            }
-        });
+                }
+            });
 
-        TextView ok_btn = dialogView.findViewById(R.id.ok_btn);
-        ok_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-            }
-        });
+            TextView ok_btn = dialogView.findViewById(R.id.ok_btn);
+            ok_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alertDialog.dismiss();
+                }
+            });
+
     }
 }
