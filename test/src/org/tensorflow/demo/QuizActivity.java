@@ -28,6 +28,12 @@ import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
@@ -180,33 +186,48 @@ public class QuizActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
         builder.setView(dialogView);
 
-        vv2 = dialogView.findViewById(R.id.videoV);
+        //vv2 = dialogView.findViewById(R.id.videoV);
         Uri videoUri = Uri.parse(dict2.getVideoURL());
-        vv2.setMediaController(new MediaController(QuizActivity.this));
-        vv2.setVideoURI(videoUri);
+        //vv2.setMediaController(new MediaController(QuizActivity.this));
+        //vv2.setVideoURI(videoUri);
 
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        vv2.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                mediaPlayer.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
-                        @Override
-                        public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                            mc = new MediaController(getLayoutInflater().getContext());
-                            vv2.setMediaController(mc);
-                            mc.setAnchorView(vv2);
-                            ((ViewGroup) mc.getParent()).removeView(mc);
-                            ((FrameLayout) dialogView.findViewById(R.id.videoViewWrapper)).addView(mc);
-                            mc.setVisibility(View.VISIBLE);
-                        }
-                    });
-                //비디오 시작
-                mediaPlayer.start();
-            }
-        });
+
+        //ExoPlayer
+        PlayerView pv;
+        SimpleExoPlayer player;
+
+        pv=dialogView.findViewById(R.id.EXOplayer);
+        player= new SimpleExoPlayer.Builder(getLayoutInflater().getContext()).build();
+        pv.setPlayer(player);
+        DataSource.Factory factory=new DefaultDataSource.Factory(getLayoutInflater().getContext());
+        ProgressiveMediaSource mediaSource= new ProgressiveMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(dict2.getVideoURL()));
+
+        player.prepare(mediaSource);
+        //player.setPlayWhenReady(true);
+
+
+//        vv2.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mediaPlayer) {
+//                mediaPlayer.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+//                        @Override
+//                        public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+//                            mc = new MediaController(getLayoutInflater().getContext());
+//                            vv2.setMediaController(mc);
+//                            mc.setAnchorView(vv2);
+//                            ((ViewGroup) mc.getParent()).removeView(mc);
+//                            ((FrameLayout) dialogView.findViewById(R.id.videoViewWrapper)).addView(mc);
+//                            mc.setVisibility(View.VISIBLE);
+//                        }
+//                    });
+//                //비디오 시작
+//                mediaPlayer.start();
+//            }
+//        });
 
         TextView ok_btn = dialogView.findViewById(R.id.ok_btn);
         ok_btn.setOnClickListener(new View.OnClickListener() {

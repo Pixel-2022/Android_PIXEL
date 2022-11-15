@@ -24,6 +24,12 @@ import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.mediapipe.components.CameraHelper;
@@ -117,7 +123,9 @@ public class quiz_media extends AppCompatActivity {
         Button nextQuiz = findViewById(R.id.nextQuiz);
         LinearLayout showButtons = findViewById(R.id.showButtons);
         FrameLayout preview_display_layout2 = findViewById(R.id.preview_display_layout2);
-        VideoView videoV = findViewById(R.id.videoV);
+        //VideoView videoV = findViewById(R.id.videoV);
+        PlayerView pv;
+        pv=findViewById(R.id.EXOplayer);
 
         backBtn = findViewById(R.id.BackBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -316,18 +324,29 @@ public class quiz_media extends AppCompatActivity {
                 //C. 카메라 안 보여주기
                 preview_display_layout2.setVisibility(View.GONE);
                 //D. 동영상 보여주기
-                videoV.setVisibility(View.VISIBLE);
-                videoV.setMediaController(new MediaController(quiz_media.this));
+                //videoV.setVisibility(View.VISIBLE);
+                pv.setVisibility(View.VISIBLE);
+                //videoV.setMediaController(new MediaController(quiz_media.this));
                 Uri videoUri = Uri.parse(video);
-                videoV.setVideoURI(videoUri);
+                //videoV.setVideoURI(videoUri);
 
-                videoV.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mediaPlayer) {
-                        //비디오 시작
-                        videoV.start();
-                    }
-                });
+                SimpleExoPlayer player;
+                player= new SimpleExoPlayer.Builder(quiz_media.this).build();
+                pv.setPlayer(player);
+                DataSource.Factory factory=new DefaultDataSource.Factory(quiz_media.this);
+                ProgressiveMediaSource mediaSource= new ProgressiveMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(video));
+
+                player.prepare(mediaSource);
+                //player.setPlayWhenReady(true);
+
+
+//                videoV.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                    @Override
+//                    public void onPrepared(MediaPlayer mediaPlayer) {
+//                        //비디오 시작
+//                        videoV.start();
+//                    }
+//                });
             }
         });
     }

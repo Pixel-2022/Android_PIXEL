@@ -19,14 +19,14 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:7.1.1'
         classpath 'org.apache.httpcomponents:httpclient:4.5.12'
     }
 }
 
 allprojects {
     repositories {
-//        jcenter()
+        jcenter()
         mavenCentral()
         google()
     }
@@ -63,9 +63,6 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 32
 
-    lintOptions {
-        abortOnError false
-    }
 
     sourceSets {
         main {
@@ -109,13 +106,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    aaptOptions{
-        noCompress "tflite"
-    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    androidResources {
+        noCompress 'tflite'
+    }
+    lint {
+        abortOnError false
     }
 }
 
@@ -190,7 +190,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.6.4'
     implementation 'org.conscrypt:conscrypt-android:2.5.0'
 
-    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    implementation 'com.google.android.gms:play-services-appindexing:8.4.0'
 
     // MediaPipe deps
     implementation 'com.google.flogger:flogger:0.3.1'
@@ -218,4 +218,12 @@ dependencies {
 
     implementation 'org.tensorflow:tensorflow-lite:0.1.100'
     implementation 'org.tensorflow:tensorflow-lite-select-tf-ops:2.3.0'
+
+    implementation 'com.google.android.exoplayer:exoplayer:2.18.0'
+    def multidex_version = "2.0.1"
+    implementation "androidx.multidex:multidex:$multidex_version"
+    def exoplayer_version = '2.18.0'
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayer_version"
+
 }

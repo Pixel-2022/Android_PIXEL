@@ -25,18 +25,25 @@
         android:layout_gravity="center"
         android:gravity="center">
 
-        <VideoView
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/EXOplayer"
+            android:layout_width="300dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"/>
+
+        <!--VideoView
             android:id="@+id/videoV"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"/>
-        <FrameLayout
+            android:layout_marginTop="10dp"/-->
+        <!--FrameLayout
             android:id="@+id/videoViewWrapper"
             android:layout_width="300dp"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/dialog_round"></FrameLayout>
+            android:background="@drawable/dialog_round"/-->
         <TextView
             android:id="@+id/ok_btn"
             android:layout_width="100dp"
@@ -44,7 +51,7 @@
             android:layout_gravity="center"
             android:background="@drawable/dialog_delete_round"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="15dp"
             android:gravity="center"
             android:text="닫기"
             android:textSize="20dp"

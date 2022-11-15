@@ -23,6 +23,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
@@ -187,39 +193,54 @@ public class DictAdapter extends RecyclerView.Adapter<DictAdapter.ViewHolder> {
         View dialogView = inflater.inflate(R.layout.dialog_video, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
         builder.setView(dialogView);
-        vv = dialogView.findViewById(R.id.videoV);
+        //vv = dialogView.findViewById(R.id.videoV);
 
 
         //URL설정
         Uri videoUri = Uri.parse(dict2.getVideoURL());
         //vv.setMediaController(new MediaController(inflater.getContext()));
-        vv.setVideoURI(videoUri);
+        //vv.setVideoURI(videoUri);
 
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 
-        vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
+        //ExoPlayer
+        PlayerView pv;
+        SimpleExoPlayer player;
 
-                mediaPlayer.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
-                    @Override
-                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                        mc = new MediaController(inflater.getContext());
-                        vv.setMediaController(mc);
-                        mc.setAnchorView(vv);
-                        ((ViewGroup) mc.getParent()).removeView(mc);
-                        ((FrameLayout) dialogView.findViewById(R.id.videoViewWrapper)).addView(mc);
-                        mc.setVisibility(View.VISIBLE);
-                    }
-                });
+        pv=dialogView.findViewById(R.id.EXOplayer);
+        player= new SimpleExoPlayer.Builder(inflater.getContext()).build();
+        pv.setPlayer(player);
+        DataSource.Factory factory=new DefaultDataSource.Factory(inflater.getContext());
+        ProgressiveMediaSource mediaSource= new ProgressiveMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(dict2.getVideoURL()));
 
-                //비디오 시작
-                mediaPlayer.start();
-            }
-        });
+        player.prepare(mediaSource);
+        //player.setPlayWhenReady(true);
+
+
+
+//        vv.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mediaPlayer) {
+//
+//                mediaPlayer.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+//                    @Override
+//                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+//                        mc = new MediaController(inflater.getContext());
+//                        vv.setMediaController(mc);
+//                        mc.setAnchorView(vv);
+//                        ((ViewGroup) mc.getParent()).removeView(mc);
+//                        ((FrameLayout) dialogView.findViewById(R.id.videoViewWrapper)).addView(mc);
+//                        mc.setVisibility(View.VISIBLE);
+//                    }
+//                });
+//
+//                //비디오 시작
+//                mediaPlayer.start();
+//            }
+//        });
 
         TextView ok_btn = dialogView.findViewById(R.id.ok_btn);
         ok_btn.setOnClickListener(new View.OnClickListener() {

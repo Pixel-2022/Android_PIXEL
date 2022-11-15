@@ -46,10 +46,18 @@
             android:gravity="center"
             android:text="no_camera_access" />
     </FrameLayout>
-    <VideoView
+    <!--VideoView
         android:id="@+id/videoV"
         android:layout_width="300dp"
         android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"/-->
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/EXOplayer"
+        android:layout_width="350dp"
+        android:layout_height="370dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:visibility="gone"/>
