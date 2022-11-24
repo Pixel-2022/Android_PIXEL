@@ -8,6 +8,7 @@ import android.content.res.AssetFileDescriptor;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
@@ -22,6 +23,7 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.exoplayer2.MediaItem;
@@ -52,7 +54,10 @@ import java.nio.channels.FileChannel;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -104,6 +109,8 @@ public class quiz_media extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_media);
+
+        HashMap<Integer,Float> SortingMap = new HashMap<>();
 
         Intent intent = getIntent();
         name = intent.getStringExtra("단어이름");
@@ -170,6 +177,7 @@ public class quiz_media extends AppCompatActivity {
                         } else {
                             Call<JsonElement> callAPI = retrofitClient.getApi().sendLandmark(LandmarkMap);
                             callAPI.enqueue(new Callback<JsonElement>() {
+                                @RequiresApi(api = Build.VERSION_CODES.N)
                                 @Override
                                 public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
                                     // Landmark Map 값 초기화
@@ -217,6 +225,16 @@ public class quiz_media extends AppCompatActivity {
                                             // 3-(2). 분석값 중 최고값을 찾기 maxNum:최고값, maxLoc:최고값의 배열 내 위치
                                             float maxNum = 0;
                                             int maxLoc = -1;
+
+                                            for (int x = 0; x < 20; x++) {
+                                                //key-value : index-value
+                                                SortingMap.put(x,output_data[0][x]);
+                                            }
+                                            List<Map.Entry<Integer, Float>> entries = SortingMap.entrySet().stream()
+                                                    .sorted(Map.Entry.comparingByValue())
+                                                    .collect(Collectors.toList());
+                                            System.out.println(entries);
+
                                             for (int x = 0; x < 20; x++) {
                                                 if (maxNum < output_data[0][x]) {
                                                     maxNum = output_data[0][x];
@@ -230,9 +248,11 @@ public class quiz_media extends AppCompatActivity {
 
                                                 // 3-(4). 올바른 번역값 출력하기
                                                 if (maxLoc != -1) {
-                                                    Log.e("번역 : ", motion18[maxLoc]);
+                                                    Log.e("번역 : ", motion18[maxLoc]+" "+ motion18[entries.get(18).getKey()]);
+                                                    Log.e("단어: ", name);
                                                     nowAnswer[0] = motion18[maxLoc];
-                                                    if (nowAnswer[0].equals(name)) {
+
+                                                    if (nowAnswer[0].equals(name)||motion18[entries.get(18).getKey()].equals(name)) {
                                                         flag = 1;
                                                         //A. 숨겨져있던 버튼들 보여주기
                                                         showButtons.setVisibility(View.VISIBLE);

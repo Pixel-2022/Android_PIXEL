@@ -140,6 +140,7 @@ public class holistic_activity extends AppCompatActivity {
 
         HashMap<Integer,Float> SortingMap = new HashMap<>();
 
+
         HashMap<String, float[][]> LandmarkMap = new HashMap<>();
         LandmarkMap.put("pose", null);
         LandmarkMap.put("leftHand", null);
@@ -309,8 +310,9 @@ public class holistic_activity extends AppCompatActivity {
 //                                            첫번째, 두번째, 세번째 번역값 출력하는 코드
                                             String firstWord = "1."+motion18[entries.get(19).getKey()];
                                             String secondWord = "2."+motion18[entries.get(18).getKey()];
+                                            String thirdWord = "3."+motion18[entries.get(17).getKey()];
 
-                                            answerFrame.setText(firstWord+" "+secondWord);
+                                            answerFrame.setText(firstWord+" "+secondWord+" "+thirdWord);
                                             if(entries.get(18).getValue() >= 0.2){
                                                 //[단어 저장 기능]인식된 단어 배열에 저장하기
                                                 if (dataList.contains(motion18[entries.get(18).getKey()]) == false) {
@@ -335,7 +337,7 @@ public class holistic_activity extends AppCompatActivity {
 
                                                 }
                                             } else {//분석값이 낮아서 무슨 동작인지 인식이 되지 않을 때
-                                                answerFrame.setText("  ");
+//                                                answerFrame.setText("  ");
                                             }
                                         }
 

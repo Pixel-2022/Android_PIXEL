@@ -68,8 +68,8 @@ public class QuizActivity extends AppCompatActivity {
     int rannum;
     private String BASE_URL = LoginActivity.getBASE_URL();
 
-    private String[] word_only={"귀엽다", "나", "만나다","미안","사람", "앉다",
-            "어디","여동생","오전","지금","휴대폰","아깝다"};
+    private String[] word_only={"귀엽다", "만나다","미안합니다","사람", "앉다",
+            "오전","지금", "아깝다"};
 
     // ApplicationInfo for retrieving metadata defined in the manifest.
     private ApplicationInfo applicationInfo;
@@ -154,7 +154,12 @@ public class QuizActivity extends AppCompatActivity {
                 Intent actintent = new Intent(getApplicationContext(), quiz_media.class);
                 Log.e("뭐하지", String.valueOf(rannum));
 
-                actintent.putExtra("단어이름", names.get(rannum));
+                if(names.get(rannum).equals("미안합니다")){
+                    actintent.putExtra("단어이름", "미안");
+                }else{
+                    actintent.putExtra("단어이름", names.get(rannum));
+                }
+
                 actintent.putExtra("단어영상", videoURLs.get(rannum));
                 startActivity(actintent);
             }
