@@ -9,6 +9,10 @@
 
 https://user-images.githubusercontent.com/81097116/203721349-8b18c06d-f0d5-4744-9c3c-15f1723c3c7c.mp4
 
+- 영상 속 LSTM 모델 구조에서 아래 구조로 수정되었습니다.
+  <div>
+  <img src="https://github.com/Pixel-2022/Android_PIXEL/assets/93665948/5dc25d03-98d5-4b73-8dbd-1af26e6a1caa" width="500"/>
+  </div>
 ## UI 화면 구성도
 
 ![로그인,회원가입](https://user-images.githubusercontent.com/81097116/203730222-a7f3fd13-68fa-4ed9-82cc-3f7ad6fd92f8.png)
